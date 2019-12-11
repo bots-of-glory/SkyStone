@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Device;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "DriverControl" , group = "testOp")
 //@Disabled
@@ -20,64 +15,55 @@ public class DriverControl extends LinearOpMode {
     private DcMotor rearLeft;       //2     Hub1 P2
     private DcMotor frontRight;     //3     Hub1 P1
     private DcMotor rearRight;      //4     Hub1 P3
+
+    private DcMotor intake1;
+    private DcMotor intake2;
+
+    private DcMotor lift1;
+    private DcMotor lift2;
+
     private Servo leftServo;
     private Servo rightServo;
-    private DcMotor stackMotor1;
-    private DcMotor stackMotor2;
     private Servo clawServo;
-    // private Servo leftServo;
-    // private Servo rightServo;
-    //private DcMotor liftMotor;      //5     Hub2 P0
-    //private DcMotor flipperMotor;       //6     Hub2 P1
-    //private DcMotor pulleyMotor;    //7     Hub2 P3
-    //private DcMotor revLift;        //8     Hub2 P2
-
-    //Servos
-   // private Servo armServo;
-    //private Servo depositServo;     //2     Hub2 P?
 
 
     @Override
     public void runOpMode () throws InterruptedException {
-//Declare DcMotors
+        //Declare DcMotors
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
-        stackMotor1 = hardwareMap.dcMotor.get("stackMotor1");
-        stackMotor2 = hardwareMap.dcMotor.get("stackMotor2");
+
+        intake1 = hardwareMap.dcMotor.get("intake1");
+        intake2 = hardwareMap.dcMotor.get("intake2");
+
+        lift1 = hardwareMap.dcMotor.get("lift1");
+        lift2 = hardwareMap.dcMotor.get("lift2");
+
+        //Declare Servos
+        leftServo = hardwareMap.servo.get("leftServo");
+        rightServo = hardwareMap.servo.get("rightServo");
         clawServo = hardwareMap.servo.get("clawservo");
-      //liftMotor = hardwareMap.dcMotor.get("liftMotor");
-       //flipperMotor = hardwareMap.dcMotor.get("flipperMotor");
-       //pulleyMotor = hardwareMap.dcMotor.get("pulleyMotor");
-       //revLift = hardwareMap.dcMotor.get("revLift");
-//Declare Servos
-      leftServo = hardwareMap.servo.get("leftServo");
-      rightServo = hardwareMap.servo.get("rightServo");
-//Declare DcMotor Directions
+
+        //Declare DcMotor Directions
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        stackMotor1.setDirection(DcMotor.Direction.REVERSE);
-        stackMotor2.setDirection(DcMotor.Direction.REVERSE);
-        stackMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        stackMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        clawServo.setDirection(Servo.Direction.FORWARD);
-        //liftMotor.setDirection(DcMotor.Direction.REVERSE);
-        //flipperMotor.setDirection(DcMotor.Direction.FORWARD);
-        //pulleyMotor.setDirection(DcMotor.Direction.FORWARD);
-        //revLift.setDirection(DcMotor.Direction.FORWARD);
-//Declare Servo Directions
+
+        intake1.setDirection(DcMotor.Direction.REVERSE);
+        intake2.setDirection(DcMotor.Direction.FORWARD);
+
+        lift1.setDirection(DcMotor.Direction.FORWARD);
+        lift2.setDirection(DcMotor.Direction.REVERSE);
+
+        //Declare Servo Directions
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(Servo.Direction.FORWARD);
 
-
-        //stackMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //stackMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-//Declare Mecanum Drive Variables
+        //Declare Mecanum Drive Variables
         double drive;
         double strafe;
         double rotate;
@@ -87,21 +73,22 @@ public class DriverControl extends LinearOpMode {
         double front_right;
         double rear_right;
 
-//Declare Speed Variables(0 = slow)(1 = fast)
+        //Declare Speed Variables(0 = slow)(1 = fast)
         int speedState = 1;
         double fast = 1.0;
         double slow = 0.6;
-
-//Declare Direction Variable(s)
+        float   leftPower, rightPower, xValue, yValue;
+        //Declare Direction Variable(s)
         int direction = 1;
 
-//Declare Continuous Servo Variables
+        //Declare Continuous Servo Variables
         int flipperState = 0;
         boolean buttonState = false;
         {
             waitForStart();
             while (opModeIsActive()) {
-//Speed
+//-----------------------------------Gamepad 1 Start------------------------------------------------
+                //Speed
                 if(gamepad1.x)
                 {
                     speedState = 1;
@@ -110,7 +97,17 @@ public class DriverControl extends LinearOpMode {
                 {
                     speedState = 0;
                 }
+                //Intake On/Off
+                if (gamepad1.b){
+                    intake1.setPower(0);
+                    intake2.setPower(0);
+                }
 
+                if (gamepad1.y) {
+                    intake1.setPower(1);
+                    intake2.setPower(1);
+                }
+                //Movement Direction
                 if(gamepad1.right_bumper)
                 {
                     direction = 1;
@@ -120,18 +117,18 @@ public class DriverControl extends LinearOpMode {
                     direction = -1;
                 }
 
-//Declare Values to Mecanum Variables
+                //Declare Values to Mecanum Variables
                 drive = gamepad1.right_stick_y * direction;
                 strafe = gamepad1.right_stick_x * direction;
                 rotate = gamepad1.left_stick_x * direction;
-//Mecanum direction calculation
+
+                //Mecanum direction calculation
                 if(direction == -1) {
                     front_left = drive - strafe + rotate;
                     rear_left = drive + strafe + rotate;
                     front_right = drive + strafe - rotate;
                     rear_right = drive - strafe - rotate;
                 }
-
                 else
                 {
                     front_left = drive - strafe - rotate;
@@ -139,8 +136,8 @@ public class DriverControl extends LinearOpMode {
                     front_right = drive + strafe + rotate;
                     rear_right = drive - strafe + rotate;
                 }
-//-----------------------------------Gamepad 1 Start------------------------------------------------
-//Mecanum Drive
+
+                //Mecanum Drive
                 if(speedState == 1)
                 {
                     frontLeft.setPower(limit(front_left)* fast);
@@ -158,11 +155,15 @@ public class DriverControl extends LinearOpMode {
 
 //------------------------------------Gamepad 1 End-------------------------------------------------
 // ------------------------------------Gamepad 2 Start-------------------------------------------------
-//Flipper up
+
+                lift1.setPower(Range.clip(gamepad1.right_stick_y, -1.0, 1.0));
+                lift2.setPower(Range.clip(gamepad1.right_stick_y, -1.0, 1.0));
+
+                //Flipper up
                 if (gamepad2.dpad_up) {
                     AutonomousCommon.servoMovement(leftServo, 90);
                     AutonomousCommon.servoMovement(rightServo, -90);
-//Flipper down
+                //Flipper down
                 }
                 if (gamepad2.dpad_down) {
                     AutonomousCommon.servoMovement(leftServo, -90);
@@ -178,37 +179,6 @@ public class DriverControl extends LinearOpMode {
                 } else {
                 }
 
-               /* if (gamepad2.right_bumper){
-                    stackMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stackMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    stackMotor1.setTargetPosition(23);
-                    stackMotor2.setTargetPosition(-23);
-
-                    stackMotor1.setPower(.75);
-                    stackMotor2.setPower(.75);
-
-                }
-
-                if (gamepad2.left_bumper) {
-                    stackMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stackMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    stackMotor1.setTargetPosition(43);
-                    stackMotor2.setTargetPosition(-43);
-
-                    stackMotor1.setPower(.75);
-                    stackMotor2.setPower(.75);
-                }*/
-                //43 bottom
-                //23 brick stack
-                //start stacking motor
-                stackMotor1.setPower( 0.35 * gamepad2.right_stick_y);
-                stackMotor2.setPower( -0.35 * gamepad2.right_stick_y);
-
-                int position = stackMotor1.getCurrentPosition();
-                telemetry.addData("Encoder Position", position);
-                telemetry.update();
 
             }
 //------------------------------------Gamepad 2 End-------------------------------------------------

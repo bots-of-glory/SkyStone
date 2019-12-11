@@ -141,32 +141,4 @@ public class AutonomousCommon {
         Blue,
         Red
     }
-    public enum FlapperServos{
-        Left(0),
-        Right(1);
-        private final int value;
-
-        private FlapperServos(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-    public enum MovementMotors {
-        FrontLeft(0),
-        FrontRight(1),
-        RearRight(2),
-        RearLeft(3);
-        private final int value;
-
-        private MovementMotors(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 }
