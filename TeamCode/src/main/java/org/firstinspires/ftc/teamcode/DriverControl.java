@@ -25,7 +25,7 @@ public class DriverControl extends LinearOpMode {
     private Servo leftServo;
     private Servo rightServo;
     private Servo clawServo;
-
+    private Servo clawExtendServo;
 
     @Override
     public void runOpMode () throws InterruptedException {
@@ -44,8 +44,9 @@ public class DriverControl extends LinearOpMode {
         //Declare Servos
         leftServo = hardwareMap.servo.get("leftServo");
         rightServo = hardwareMap.servo.get("rightServo");
-        clawServo = hardwareMap.servo.get("clawservo");
 
+        clawServo = hardwareMap.servo.get("clawservo");
+        clawExtendServo = hardwareMap.servo.get("clawExtendServo");
         //Declare DcMotor Directions
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -62,6 +63,7 @@ public class DriverControl extends LinearOpMode {
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
+        clawExtendServo.setDirection(Servo.Direction.FORWARD);
 
         //Declare Mecanum Drive Variables
         double drive;
@@ -161,22 +163,29 @@ public class DriverControl extends LinearOpMode {
 
                 //Flipper up
                 if (gamepad2.dpad_up) {
-                    AutonomousCommon.servoMovement(leftServo, 90);
-                    AutonomousCommon.servoMovement(rightServo, -90);
+                    AutonomousCommon.servoMovement(leftServo, 1);
+                    AutonomousCommon.servoMovement(rightServo, 0);
                 //Flipper down
                 }
                 if (gamepad2.dpad_down) {
-                    AutonomousCommon.servoMovement(leftServo, -90);
-                    AutonomousCommon.servoMovement(rightServo, 90);
+                    AutonomousCommon.servoMovement(leftServo, 0);
+                    AutonomousCommon.servoMovement(rightServo, 1);
                 }
 
                 if (gamepad2.dpad_left) {
-                    AutonomousCommon.servoMovement(clawServo, 90);
+                    AutonomousCommon.servoMovement(clawServo, 1);
                 }
-                //Forward
-                else if (gamepad2.dpad_right) {
-                    AutonomousCommon.servoMovement(clawServo, -90);
-                } else {
+                if (gamepad2.dpad_right) {
+                    AutonomousCommon.servoMovement(clawServo, 0);
+                }
+
+                if(gamepad2.x)
+                {
+                    AutonomousCommon.servoMovement(clawServo, 0);
+                }
+                else if(gamepad2.a)
+                {
+                    AutonomousCommon.servoMovement(clawServo, 1);
                 }
 
 
