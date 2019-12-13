@@ -26,8 +26,8 @@ public class Intake_Test extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            intake1.setPower(1 * gamepad1.right_stick_y);
-            intake2.setPower(1 * gamepad1.right_stick_y);
+            intake1.setPower(1 * gamepad1.right_stick_y*0.3);
+            intake2.setPower(1 * gamepad1.right_stick_y*0.3);
 
         }
         // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,2600,0.6,true, telemetry);
