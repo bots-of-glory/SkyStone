@@ -81,6 +81,7 @@ public class DriverControl extends LinearOpMode {
         int speedState = 1;
         double fast = 1.0;
         double slow = 0.6;
+        double intakeOffset = 0.3;
         float   leftPower, rightPower, xValue, yValue;
         //Declare Direction Variable(s)
         int direction = 1;
@@ -108,8 +109,8 @@ public class DriverControl extends LinearOpMode {
                 }
 
                 if (gamepad1.y) {
-                    intake1.setPower(1);
-                    intake2.setPower(1);
+                    intake1.setPower(1*intakeOffset);
+                    intake2.setPower(1*intakeOffset);
                 }
                 //Movement Direction
                 if(gamepad1.right_bumper)
