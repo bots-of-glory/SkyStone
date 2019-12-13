@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,7 +26,8 @@ public class DriverControl extends LinearOpMode {
     private Servo leftServo;
     private Servo rightServo;
     private Servo clawServo;
-    private Servo clawExtendServo;
+    private CRServo clawExtendServo;
+
 
     @Override
     public void runOpMode () throws InterruptedException {
@@ -167,6 +169,7 @@ public class DriverControl extends LinearOpMode {
                     AutonomousCommon.servoMovement(rightServo, 0);
                 //Flipper down
                 }
+
                 if (gamepad2.dpad_down) {
                     AutonomousCommon.servoMovement(leftServo, 0);
                     AutonomousCommon.servoMovement(rightServo, 1);
@@ -181,11 +184,11 @@ public class DriverControl extends LinearOpMode {
 
                 if(gamepad2.x)
                 {
-                    AutonomousCommon.servoMovement(clawServo, 0);
+                    clawExtendServo.
                 }
                 else if(gamepad2.a)
                 {
-                    AutonomousCommon.servoMovement(clawServo, 1);
+                    AutonomousCommon.servoMovement(clawExtendServo, 1);
                 }
 
 
