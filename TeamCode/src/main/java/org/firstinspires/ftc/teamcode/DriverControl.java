@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.Range;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "DriverControl" , group = "testOp")
@@ -26,7 +27,7 @@ public class DriverControl extends LinearOpMode {
     private Servo leftServo;
     private Servo rightServo;
     private Servo clawServo;
-    private Servo clawExtendServo;
+    private CRServo clawExtendServo;
 
 
     @Override
@@ -48,7 +49,7 @@ public class DriverControl extends LinearOpMode {
         rightServo = hardwareMap.servo.get("rightServo");
 
         clawServo = hardwareMap.servo.get("clawservo");
-        clawExtendServo = hardwareMap.servo.get("clawExtendServo");
+        clawExtendServo = hardwareMap.crservo.get("clawExtendServo");
         //Declare DcMotor Directions
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -65,7 +66,7 @@ public class DriverControl extends LinearOpMode {
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
-        clawExtendServo.setDirection(Servo.Direction.FORWARD);
+        clawExtendServo.setDirection(CRServo.Direction.FORWARD);
 
         //Declare Mecanum Drive Variables
         double drive;
@@ -185,11 +186,14 @@ public class DriverControl extends LinearOpMode {
 
                 if(gamepad2.x)
                 {
-                    //clawExtendServo.
+                    clawExtendServo.setPower(1.0);
                 }
                 else if(gamepad2.a)
                 {
-                    //AutonomousCommon.servoMovement(clawExtendServo, 1);
+                    clawExtendServo.setPower(-1.0);
+                }
+                else {
+                    clawExtendServo.setPower(0);
                 }
 
 

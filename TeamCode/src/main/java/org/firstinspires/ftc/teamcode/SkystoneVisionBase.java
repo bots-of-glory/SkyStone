@@ -10,6 +10,7 @@ public class SkystoneVisionBase extends SkystoneBase {
     MasterVision vision;
     SampleRandomizedPositions goldPosition;
 
+
     @Override
     public void initMotors(){
         super.initMotors();
