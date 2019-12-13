@@ -26,7 +26,7 @@ public class DriverControl extends LinearOpMode {
     private Servo leftServo;
     private Servo rightServo;
     private Servo clawServo;
-    private CRServo clawExtendServo;
+    private Servo clawExtendServo;
 
 
     @Override
@@ -160,8 +160,8 @@ public class DriverControl extends LinearOpMode {
 //------------------------------------Gamepad 1 End-------------------------------------------------
 // ------------------------------------Gamepad 2 Start-------------------------------------------------
 
-                lift1.setPower(Range.clip(gamepad1.right_stick_y, -1.0, 1.0));
-                lift2.setPower(Range.clip(gamepad1.right_stick_y, -1.0, 1.0));
+                lift1.setPower(Range.clip(gamepad1.right_stick_y*slow, -1.0, 1.0));
+                lift2.setPower(Range.clip(gamepad1.right_stick_y*slow, -1.0, 1.0));
 
                 //Flipper up
                 if (gamepad2.dpad_up) {
@@ -184,11 +184,11 @@ public class DriverControl extends LinearOpMode {
 
                 if(gamepad2.x)
                 {
-                    clawExtendServo.
+                    //clawExtendServo.
                 }
                 else if(gamepad2.a)
                 {
-                    AutonomousCommon.servoMovement(clawExtendServo, 1);
+                    //AutonomousCommon.servoMovement(clawExtendServo, 1);
                 }
 
 
