@@ -113,23 +113,13 @@ public class DriverControl extends LinearOpMode {
                     intake1.setPower(1*intakeOffset);
                     intake2.setPower(1*intakeOffset);
                 }
-                //Movement Direction
-                if(gamepad1.right_bumper)
-                {
-                    direction = 1;
-                }
-                else if(gamepad1.left_bumper)
-                {
-                    direction = -1;
-                }
-
                 //Declare Values to Mecanum Variables
                 drive = gamepad1.right_stick_y * direction;
                 strafe = gamepad1.right_stick_x * direction;
                 rotate = gamepad1.left_stick_x * direction;
 
                 //Mecanum direction calculation
-                if(direction == -1) {
+                if(direction == 1) {
                     front_left = drive - strafe + rotate;
                     rear_left = drive + strafe + rotate;
                     front_right = drive + strafe - rotate;
@@ -162,8 +152,8 @@ public class DriverControl extends LinearOpMode {
 //------------------------------------Gamepad 1 End-------------------------------------------------
 // ------------------------------------Gamepad 2 Start-------------------------------------------------
 
-                lift1.setPower(Range.clip(gamepad1.right_stick_y*slow, -1.0, 1.0));
-                lift2.setPower(Range.clip(gamepad1.right_stick_y*slow, -1.0, 1.0));
+                lift1.setPower(Range.clip(gamepad2.right_stick_y*slow, -1.0, 1.0));
+                lift2.setPower(Range.clip(gamepad2.right_stick_y*slow, -1.0, 1.0));
 
                 //Flipper up
                 if (gamepad2.dpad_up) {
@@ -184,15 +174,11 @@ public class DriverControl extends LinearOpMode {
                     AutonomousCommon.servoMovement(clawServo, 0);
                 }
 
-                if(gamepad2.x)
+                while(gamepad2.x)
                 {
                     clawExtendServo.setPower(1.0);
                 }
-                else if(gamepad2.a)
-                {
-                    clawExtendServo.setPower(-1.0);
-                }
-                else {
+                while (gamepad2.a) {
                     clawExtendServo.setPower(0);
                 }
 
