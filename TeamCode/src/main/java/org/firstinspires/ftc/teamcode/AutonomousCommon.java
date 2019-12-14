@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -23,7 +24,28 @@ public class AutonomousCommon {
         macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
 
     }
+    public static void macanumRotate(DcMotor frontLeft, DcMotor rearLeft,
+                                     DcMotor frontRight, DcMotor rearRight, int degrees, boolean opModeIsActive,
+                                     Telemetry telemetry){
+        telemetry.addLine("Begin macanumRotate");
+        telemetry.update();
+        degrees = (int) Range.clip(degrees,0,360);
 
+        frontLeft.setPower(1);
+        rearLeft.setPower(1);
+        frontRight.setPower(-1);
+        rearRight.setPower(-1);
+
+        sleep(1000*degrees);
+
+        frontLeft.setPower(0);
+        rearLeft.setPower(0);
+        frontRight.setPower(0);
+        rearRight.setPower(0);
+
+        telemetry.addLine("End macanumRotate");
+        telemetry.update();
+    }
     public static void macanumMovement(DcMotor frontLeft, DcMotor rearLeft,
                                        DcMotor frontRight, DcMotor rearRight,
                                        StrafeDirection strafeDirection,
