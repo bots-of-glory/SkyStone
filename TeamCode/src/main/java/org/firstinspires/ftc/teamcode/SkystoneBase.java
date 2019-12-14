@@ -134,7 +134,7 @@ public class SkystoneBase extends LinearOpMode {
     /**
      * Grabs the lego.
      */
-    public void grabLego(){
+    public void grabLego(VUPosition position){
         telemetry.addLine("Begin grabLego");
 
         telemetry.addLine("End grabLego");

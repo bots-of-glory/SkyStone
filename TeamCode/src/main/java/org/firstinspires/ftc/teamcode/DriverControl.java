@@ -82,7 +82,7 @@ public class DriverControl extends LinearOpMode {
         int speedState = 1;
         double fast = 1.0;
         double slow = 0.6;
-        double intakeOffset = 0.3;
+        double intakeOffset = .75;
         float   leftPower, rightPower, xValue, yValue;
         //Declare Direction Variable(s)
         int direction = 1;
@@ -174,13 +174,17 @@ public class DriverControl extends LinearOpMode {
                     AutonomousCommon.servoMovement(clawServo, 0);
                 }
 
-                while(gamepad2.x)
+                if (gamepad2.x)
                 {
                     clawExtendServo.setPower(1.0);
                 }
-                while (gamepad2.a) {
+                else if (gamepad2.a) {
+                    clawExtendServo.setPower(-1);
+                }
+                else {
                     clawExtendServo.setPower(0);
                 }
+
 
 
             }

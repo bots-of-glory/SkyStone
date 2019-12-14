@@ -11,20 +11,21 @@ public class LoadingZoneBlue extends SkystoneVisionBase{
     @Override
     public void runOpMode() throws InterruptedException {
         this.playSide = PlayfieldSide.Blue;
+        AutonomousCommon.VUPosition position;
         initMotors();
         waitForStart();
         //tempSkybridgeParkAway();
         //1st Skystone
         moveToLegos();
-        locateSkystone();
-        grabLego();
+        position= locateSkystone();
+        grabLego(position);
         moveToBuildingZone();
         dropLego();
 
         //2nd Skystone
         moveToLegos();
-        locateSkystone();
-        grabLego();
+        position= locateSkystone();
+        grabLego(position);
         moveToBuildingZone();
         dropLego();
 

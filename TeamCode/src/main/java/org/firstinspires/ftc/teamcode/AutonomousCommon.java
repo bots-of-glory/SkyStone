@@ -163,4 +163,13 @@ public class AutonomousCommon {
         Blue,
         Red
     }
+    public static class VUPosition {
+        public double x;
+        public double z;
+        public VUPoistionDirection direction;
+
+    }
+    public enum VUPoistionDirection{
+        Left, Center, Right
+    }
 }

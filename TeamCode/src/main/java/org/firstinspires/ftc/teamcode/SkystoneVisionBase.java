@@ -19,6 +19,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirection.Center;
+import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirection.Left;
+import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirection.Right;
 
 /**
  * Base Class for Skystone operations that require vision (Vuforia)
@@ -92,13 +95,14 @@ public class SkystoneVisionBase extends SkystoneBase {
     /**
      * Attempts to locate the Skystone.
      */
-    public  void locateSkystone(){
+    public AutonomousCommon.VUPosition locateSkystone(){
         telemetry.addLine("Begin locateSkystone");
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
          * If no camera monitor is desired, use the parameter-less constructor instead (commented out below).
          */
+        AutonomousCommon.VUPosition pos = new AutonomousCommon.VUPosition();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -305,14 +309,20 @@ public class SkystoneVisionBase extends SkystoneBase {
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 double xPosition = translation.get(0);
+                double zPosition = translation.get(2);
                 if (xPosition < -22.6) {
                     positionSkystone = "left";
+                    pos.direction = Left;
                 } else if (xPosition < -28.4) {
                     positionSkystone = "center";
+                    pos.direction = Center;
                 } else if (xPosition < - 30) {
                     positionSkystone = "Right";
+                    pos.direction = Right;
                 }
 
+                pos.x = xPosition;
+                pos.z =zPosition;
 
 
 
@@ -331,5 +341,7 @@ public class SkystoneVisionBase extends SkystoneBase {
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
         telemetry.addLine("End locateSkystone");
+        return pos;
+
     }
 }
