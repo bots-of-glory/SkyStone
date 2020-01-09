@@ -18,16 +18,16 @@ public class DriverControl extends LinearOpMode {
     private DcMotor frontRight;     //3     Hub1 P1
     private DcMotor rearRight;      //4     Hub1 P3
 
-    private DcMotor intake1;
-    private DcMotor intake2;
+    //private DcMotor intake1;
+    //private DcMotor intake2;
 
     private DcMotor lift1;
     private DcMotor lift2;
 
     private Servo leftServo;
     private Servo rightServo;
-    private Servo clawServo;
-    private CRServo clawExtendServo;
+    private CRServo clawServo;
+    //private CRServo clawExtendServo;
 
 
     @Override
@@ -38,8 +38,8 @@ public class DriverControl extends LinearOpMode {
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
 
-        intake1 = hardwareMap.dcMotor.get("intake1");
-        intake2 = hardwareMap.dcMotor.get("intake2");
+        //intake1 = hardwareMap.dcMotor.get("intake1");
+       // intake2 = hardwareMap.dcMotor.get("intake2");
 
         lift1 = hardwareMap.dcMotor.get("lift1");
         lift2 = hardwareMap.dcMotor.get("lift2");
@@ -48,16 +48,16 @@ public class DriverControl extends LinearOpMode {
         leftServo = hardwareMap.servo.get("leftServo");
         rightServo = hardwareMap.servo.get("rightServo");
 
-        clawServo = hardwareMap.servo.get("clawservo");
-        clawExtendServo = hardwareMap.crservo.get("clawExtendServo");
+        clawServo = hardwareMap.crservo.get("clawservo");
+        //clawExtendServo = hardwareMap.crservo.get("clawExtendServo");
         //Declare DcMotor Directions
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        intake1.setDirection(DcMotor.Direction.REVERSE);
-        intake2.setDirection(DcMotor.Direction.FORWARD);
+        //intake1.setDirection(DcMotor.Direction.REVERSE);
+        //intake2.setDirection(DcMotor.Direction.FORWARD);
 
         lift1.setDirection(DcMotor.Direction.FORWARD);
         lift2.setDirection(DcMotor.Direction.REVERSE);
@@ -65,8 +65,8 @@ public class DriverControl extends LinearOpMode {
         //Declare Servo Directions
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
-        clawServo.setDirection(Servo.Direction.FORWARD);
-        clawExtendServo.setDirection(CRServo.Direction.FORWARD);
+        clawServo.setDirection(CRServo.Direction.FORWARD);
+        //clawExtendServo.setDirection(CRServo.Direction.FORWARD);
 
         //Declare Mecanum Drive Variables
         double drive;
@@ -85,7 +85,7 @@ public class DriverControl extends LinearOpMode {
         double intakeOffset = .75;
         float   leftPower, rightPower, xValue, yValue;
         //Declare Direction Variable(s)
-        int direction = 1;
+        int direction = -1;
 
         //Declare Continuous Servo Variables
         int flipperState = 0;
@@ -105,13 +105,13 @@ public class DriverControl extends LinearOpMode {
                 }
                 //Intake On/Off
                 if (gamepad1.b){
-                    intake1.setPower(0);
-                    intake2.setPower(0);
+                    //intake1.setPower(0);
+                    //intake2.setPower(0);
                 }
 
                 if (gamepad1.y) {
-                    intake1.setPower(1*intakeOffset);
-                    intake2.setPower(1*intakeOffset);
+                    //intake1.setPower(1*intakeOffset);
+                    //intake2.setPower(1*intakeOffset);
                 }
                 //Declare Values to Mecanum Variables
                 drive = gamepad1.right_stick_y * direction;
@@ -167,24 +167,15 @@ public class DriverControl extends LinearOpMode {
                     AutonomousCommon.servoMovement(rightServo, 1);
                 }
 
-                if (gamepad2.dpad_left) {
-                    AutonomousCommon.servoMovement(clawServo, 1);
+                if (gamepad2.a) {
+                    clawServo.setPower(1.0);
                 }
-                if (gamepad2.dpad_right) {
-                    AutonomousCommon.servoMovement(clawServo, 0);
-                }
-
-                if (gamepad2.x)
-                {
-                    clawExtendServo.setPower(1.0);
-                }
-                else if (gamepad2.a) {
-                    clawExtendServo.setPower(-1);
+                else if (gamepad2.y) {
+                    clawServo.setPower(-1.0);
                 }
                 else {
-                    clawExtendServo.setPower(0);
+                    clawServo.setPower(0);
                 }
-
 
 
             }
