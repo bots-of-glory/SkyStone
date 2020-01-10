@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -78,7 +79,7 @@ public class SkystoneVisionBase extends SkystoneBase {
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
-
+    WebcamName testCam = null;
     @Override
     public void initMotors(){
         super.initMotors();
@@ -97,19 +98,29 @@ public class SkystoneVisionBase extends SkystoneBase {
      */
     public AutonomousCommon.VUPosition locateSkystone(){
         telemetry.addLine("Begin locateSkystone");
+        testCam = hardwareMap.get(WebcamName.class, "testCam");
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
          * If no camera monitor is desired, use the parameter-less constructor instead (commented out below).
          */
         AutonomousCommon.VUPosition pos = new AutonomousCommon.VUPosition();
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
+         * If no camera monitor is desired, use the parameter-less constructor instead (commented out below).
+         */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+
+        /**
+         * We also indicate which camera on the RC we wish to use.
+         */
+        parameters.cameraName = testCam;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -252,7 +263,7 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
@@ -285,9 +296,6 @@ public class SkystoneVisionBase extends SkystoneBase {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    if (trackable.getName().equals("Stone Target")) {
-                        telemetry.addLine("Skystone is visible");
-                    }
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
@@ -307,34 +315,26 @@ public class SkystoneVisionBase extends SkystoneBase {
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
                 double xPosition = translation.get(0);
                 double zPosition = translation.get(2);
                 if (xPosition < -22.6) {
-                    positionSkystone = "left";
                     pos.direction = Left;
                 } else if (xPosition < -28.4) {
-                    positionSkystone = "center";
                     pos.direction = Center;
                 } else if (xPosition < - 30) {
-                    positionSkystone = "Right";
                     pos.direction = Right;
                 }
 
                 pos.x = xPosition;
                 pos.z =zPosition;
 
-
-
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
-                positionSkystone = "right";
                 telemetry.addData("Visible Target", "none");
             }
-            telemetry.addData("Skystone Position is ", positionSkystone);
             telemetry.update();
         }
 
@@ -342,6 +342,5 @@ public class SkystoneVisionBase extends SkystoneBase {
         targetsSkyStone.deactivate();
         telemetry.addLine("End locateSkystone");
         return pos;
-
     }
 }
