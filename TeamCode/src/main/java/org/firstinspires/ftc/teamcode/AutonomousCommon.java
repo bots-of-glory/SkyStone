@@ -17,7 +17,7 @@ public class AutonomousCommon {
     public static void macanumBox(DcMotor frontLeft, DcMotor rearLeft,
                                   DcMotor frontRight, DcMotor rearRight,
                                   int targetPosition, double power, boolean opModeIsActive,
-                                  Telemetry telemetry) {
+                                  Telemetry telemetry) throws InterruptedException{
         macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
         macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
         macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
@@ -47,6 +47,85 @@ public class AutonomousCommon {
         telemetry.update();
     }
     public static void macanumMovement(DcMotor frontLeft, DcMotor rearLeft,
+                                       DcMotor frontRight, DcMotor rearRight,
+                                       StrafeDirection strafeDirection,
+                                       int inches, double power, boolean opModeIsActive,
+                                       Telemetry telemetry) throws InterruptedException{
+
+        telemetry.addLine("Begin macanumMovement");
+        telemetry.update();
+        //rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        double rearPower = power;
+        double frontPower =  power+.025;
+        switch (strafeDirection) {
+            case Left:
+                telemetry.addLine("strafing left");
+                telemetry.update();
+                rearLeft.setPower(rearPower);
+                rearRight.setPower(-rearPower);
+                frontLeft.setPower(-frontPower);
+                frontRight.setPower(frontPower);
+                break;
+            case Right:
+                telemetry.addLine("strafing right");
+                telemetry.update();
+                rearLeft.setPower(-rearPower);
+                rearRight.setPower(rearPower);
+                frontLeft.setPower(frontPower);
+                frontRight.setPower(-frontPower);
+                break;
+            case Forward:
+                telemetry.addLine("moving forward");
+                telemetry.update();
+                rearLeft.setPower(rearPower);
+                rearRight.setPower(rearPower);
+                frontLeft.setPower(frontPower);
+                frontRight.setPower(frontPower);
+                break;
+            case Backward:
+                telemetry.addLine("moving backward");
+                telemetry.update();
+                rearLeft.setPower(-rearPower);
+                rearRight.setPower(-rearPower);
+                frontLeft.setPower(-frontPower);
+                frontRight.setPower(-frontPower);
+                break;
+        }
+        if(strafeDirection == StrafeDirection.Right || strafeDirection == StrafeDirection.Left)
+        {
+            //1 sec = 51 inches
+            Thread.sleep((1000*inches)/12);
+        }
+        else{
+            //1 sec = 51 inches
+            Thread.sleep((1000*inches)/65);
+        }
+
+
+        while (rearLeft.isBusy() && opModeIsActive) {
+        }
+        while (rearRight.isBusy() && opModeIsActive) {
+        }
+        while (frontLeft.isBusy() && opModeIsActive) {
+        }
+        while (frontRight.isBusy() && opModeIsActive) {
+        }
+        rearLeft.setPower(0);
+        rearRight.setPower(0);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        Thread.sleep(500);
+        telemetry.addLine("End macanumMovement");
+        telemetry.update();
+    }
+    public static void macanumMovementEncoded(DcMotor frontLeft, DcMotor rearLeft,
                                        DcMotor frontRight, DcMotor rearRight,
                                        StrafeDirection strafeDirection,
                                        int targetPosition, double power, boolean opModeIsActive,
@@ -122,7 +201,6 @@ public class AutonomousCommon {
         telemetry.addLine("End macanumMovement");
         telemetry.update();
     }
-
     public static void servoMovement(Servo servo, double position) {
         servo.setPosition(position);
     }

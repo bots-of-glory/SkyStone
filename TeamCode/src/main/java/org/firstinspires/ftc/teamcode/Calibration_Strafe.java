@@ -10,7 +10,7 @@ public class Calibration_Strafe extends SkystoneBase {
         this.playSide = AutonomousCommon.PlayfieldSide.Blue;
         initMotors();
         waitForStart();
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,1000,0.6,true, telemetry);
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,10,0.6,true, telemetry);
 
     }
 

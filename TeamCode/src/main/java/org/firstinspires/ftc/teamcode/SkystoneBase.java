@@ -63,16 +63,19 @@ public class SkystoneBase extends LinearOpMode {
         int backupPosition = AutonomousCommon.convertInchesToPosition(36.0,false);
         int forwardPosition = AutonomousCommon.convertInchesToPosition(2.0,false);
         double power = 1.0;
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, forwardPosition, power, opModeIsActive(), telemetry);
-        if (playSide == PlayfieldSide.Blue) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, strafeToPosition, power, opModeIsActive(), telemetry);
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
-        }
-        if (playSide == PlayfieldSide.Red) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, strafeToPosition, power, opModeIsActive(), telemetry);
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
-        }
+        try {
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, forwardPosition, power, opModeIsActive(), telemetry);
+            if (playSide == PlayfieldSide.Blue) {
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, strafeToPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
+            }
+            if (playSide == PlayfieldSide.Red) {
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, strafeToPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
+            }
+        }catch (InterruptedException ex){
 
+        }
 
         telemetry.addLine("End moveToPlatform " + playSide.toString());
     }
@@ -96,11 +99,15 @@ public class SkystoneBase extends LinearOpMode {
         telemetry.addLine("Begin moveToSkybridge");
         int forwardPosition = convertInchesToPosition(51,true);
         double power = 1.0;
-        if (playSide==PlayfieldSide.Blue) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, forwardPosition, power, opModeIsActive(), telemetry);
+        try{
+            if (playSide==PlayfieldSide.Blue) {
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, forwardPosition, power, opModeIsActive(), telemetry);
+            }
+            if (playSide==PlayfieldSide.Red) {
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, forwardPosition, power, opModeIsActive(), telemetry);
         }
-        if (playSide==PlayfieldSide.Red) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, forwardPosition, power, opModeIsActive(), telemetry);
+        }catch (InterruptedException ex){
+
         }
         telemetry.addLine("End moveToSkybridge");
     }
@@ -113,13 +120,16 @@ public class SkystoneBase extends LinearOpMode {
         int towToWall = AutonomousCommon.convertInchesToPosition(38.0,false);
         int towForward = AutonomousCommon.convertInchesToPosition(1,false);
         double power = 1.0;
+        try{
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,towToWall,power,opModeIsActive(),telemetry);
+            AutonomousCommon.servoMovement(leftServo, 90);
+            AutonomousCommon.servoMovement(rightServo, -90);
+            sleep(2000); //wait
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,towForward,power,opModeIsActive(),telemetry);
+            telemetry.addLine("End movePlatformToBuildingSite");
+        }catch (InterruptedException ex){
 
-        macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,towToWall,power,opModeIsActive(),telemetry);
-        AutonomousCommon.servoMovement(leftServo, 90);
-        AutonomousCommon.servoMovement(rightServo, -90);
-        sleep(2000); //wait
-        macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,towForward,power,opModeIsActive(),telemetry);
-        telemetry.addLine("End movePlatformToBuildingSite");
+        }
     }
 
     /**
@@ -168,11 +178,15 @@ public class SkystoneBase extends LinearOpMode {
     public void tempSkybridgeParkWall() {
         double power = 1.0;
         telemetry.addLine("Begin tempSkybridgeParkWall");
-        if(playSide==PlayfieldSide.Blue){
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,AutonomousCommon.convertInchesToPosition(20.0,false),power,opModeIsActive(),telemetry);
-        }
-        if(playSide==PlayfieldSide.Red){
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,AutonomousCommon.convertInchesToPosition(20.0,false),power,opModeIsActive(),telemetry);
+        try{
+            if(playSide==PlayfieldSide.Blue){
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,AutonomousCommon.convertInchesToPosition(20.0,false),power,opModeIsActive(),telemetry);
+            }
+            if(playSide==PlayfieldSide.Red){
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,AutonomousCommon.convertInchesToPosition(20.0,false),power,opModeIsActive(),telemetry);
+            }
+        }catch (InterruptedException ex){
+
         }
         telemetry.addLine("End tempSkybridgeParkWall");
     }
@@ -182,13 +196,17 @@ public class SkystoneBase extends LinearOpMode {
     public void tempSkybridgeParkAway() {
         double power = 1.0;
         telemetry.addLine("Begin tempSkybridgeParkAway");
-        if(playSide==PlayfieldSide.Blue){
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,tempMovePosition,power,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,tempStrafeToWall,power,opModeIsActive(),telemetry);
-        }
-        if(playSide==PlayfieldSide.Red){
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,tempMovePosition,power,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,tempStrafeToWall,power,opModeIsActive(),telemetry);
+        try{
+            if(playSide==PlayfieldSide.Blue){
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,tempMovePosition,power,opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,tempStrafeToWall,power,opModeIsActive(),telemetry);
+            }
+            if(playSide==PlayfieldSide.Red){
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,tempMovePosition,power,opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,tempStrafeToWall,power,opModeIsActive(),telemetry);
+            }
+        }catch (InterruptedException ex){
+
         }
         telemetry.addLine("End tempSkybridgeParkAway");
     }
