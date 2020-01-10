@@ -141,12 +141,12 @@ public class AutonomousCommon {
 
         if(isStrafe){
             //strafe factor
-            returnValue = (int) Math.round(inches * (1000/9));
+            returnValue = (int) Math.round(inches * (1000/17));
         }
         else
         {
             //non strafe factor
-            returnValue = (int) Math.round(inches * (1000/11));
+            returnValue = (int) Math.round(inches * (1000/23));
         }
 
         return returnValue;

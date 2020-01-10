@@ -4,7 +4,13 @@ package org.firstinspires.ftc.teamcode;
 public class Calibration_Straight extends SkystoneBase {
     @Override
     public void runOpMode() throws InterruptedException {
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,1000,1.0,true, telemetry);
+        this.playSide = AutonomousCommon.PlayfieldSide.Blue;
+        initMotors();
+        waitForStart();
+        int calibrationTest = (AutonomousCommon.convertInchesToPosition(10, false));
+        int strafeTest = (AutonomousCommon.convertInchesToPosition(10,true));
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,1000,1,opModeIsActive(), telemetry);
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,1000,1,opModeIsActive(),telemetry);
 
     }
 
