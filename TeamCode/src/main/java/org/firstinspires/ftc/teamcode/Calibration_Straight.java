@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode;
 public class Calibration_Straight extends SkystoneBase {
     @Override
     public void runOpMode() throws InterruptedException {
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,1000,0.6,true, telemetry);
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,1000,1.0,true, telemetry);
 
     }
 

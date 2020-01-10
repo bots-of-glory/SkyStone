@@ -18,10 +18,10 @@ public class AutonomousCommon {
                                   DcMotor frontRight, DcMotor rearRight,
                                   int targetPosition, double power, boolean opModeIsActive,
                                   Telemetry telemetry) {
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
 
     }
     public static void macanumRotate(DcMotor frontLeft, DcMotor rearLeft,
