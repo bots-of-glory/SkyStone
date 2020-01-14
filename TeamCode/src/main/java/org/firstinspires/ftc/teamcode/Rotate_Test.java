@@ -7,8 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Rotate_Test extends SkystoneBase {
     @Override
     public void runOpMode() throws InterruptedException {
+        this.playSide = AutonomousCommon.PlayfieldSide.Blue;
+        initMotors();
+        waitForStart();
 
-        AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry);
+        AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry, AutonomousCommon.RotateDegree.Positive);
     }
 
 }

@@ -3,15 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.Range;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "DriverControl" , group = "testOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "DriverControlAlexander" , group = "testOp")
 //@Disabled
 
-public class DriverControl extends LinearOpMode {
+public class DriverControlAlexander extends LinearOpMode {
     //DcMotors
     private DcMotor frontLeft;      //1     Hub1 P0
     private DcMotor rearLeft;       //2     Hub1 P2
@@ -114,9 +112,9 @@ public class DriverControl extends LinearOpMode {
                     //intake2.setPower(1*intakeOffset);
                 }
                 //Declare Values to Mecanum Variables
-                drive = gamepad1.right_stick_y * direction;
-                strafe = gamepad1.right_stick_x * direction;
-                rotate = gamepad1.left_stick_x * direction;
+                drive = gamepad1.left_stick_y * direction;
+                strafe = gamepad1.left_stick_x * direction;
+                rotate = gamepad1.right_stick_x * direction;
 
                 //Mecanum direction calculation
                 if(direction == 1) {

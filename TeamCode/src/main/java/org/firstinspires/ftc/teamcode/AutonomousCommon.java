@@ -24,25 +24,47 @@ public class AutonomousCommon {
         macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
 
     }
+    public static void motorLift(DcMotor lift1,DcMotor lift2,boolean opModeIsActive, Telemetry telemetry) throws InterruptedException {
+        telemetry.addLine("Begin motorLift");
+        telemetry.update();
+
+        lift1.setPower(1);
+        lift2.setPower(1);
+        sleep( 500);
+        lift1.setPower(-1);
+        lift2.setPower(-1);
+        sleep(500);
+
+    }
     public static void macanumRotate(DcMotor frontLeft, DcMotor rearLeft,
                                      DcMotor frontRight, DcMotor rearRight, int degrees, boolean opModeIsActive,
-                                     Telemetry telemetry){
+                                     Telemetry telemetry, RotateDegree rotateDegree) throws InterruptedException {
         telemetry.addLine("Begin macanumRotate");
         telemetry.update();
         degrees = (int) Range.clip(degrees,0,360);
 
-        frontLeft.setPower(1);
-        rearLeft.setPower(1);
-        frontRight.setPower(-1);
-        rearRight.setPower(-1);
 
-        sleep(1000*degrees);
+        switch (rotateDegree) {
+            case Positive:
+                frontLeft.setPower(-1);
+                rearLeft.setPower(-1);
+                frontRight.setPower(1);
+                rearRight.setPower(1);
+                break;
+            case Negative:
+                frontLeft.setPower(1);
+                rearLeft.setPower(1);
+                frontRight.setPower(-1);
+                rearRight.setPower(-1);
+                break;
+        }
+        sleep( 13*degrees);
 
         frontLeft.setPower(0);
         rearLeft.setPower(0);
         frontRight.setPower(0);
         rearRight.setPower(0);
-
+        Thread.sleep(500);
         telemetry.addLine("End macanumRotate");
         telemetry.update();
     }
@@ -63,7 +85,7 @@ public class AutonomousCommon {
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double rearPower = power;
-        double frontPower =  power+.025;
+        double frontPower =  power + 0.0;
         switch (strafeDirection) {
             case Left:
                 telemetry.addLine("strafing left");
@@ -249,5 +271,9 @@ public class AutonomousCommon {
     }
     public enum VUPoistionDirection{
         Left, Center, Right
+    }
+    public enum RotateDegree {
+        Positive,
+        Negative
     }
 }

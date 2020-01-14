@@ -348,11 +348,11 @@ public class SkystoneFinder extends LinearOpMode {
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 double xPosition = translation.get(0);
-                if (xPosition < -22.6) {
+                if (xPosition < 16.3) {
                     positionSkystone = "left";
-                } else if (xPosition < -28.4) {
+                } else if (xPosition <16.5) {
                     positionSkystone = "center";
-                } else if (xPosition < - 30) {
+                } else if (xPosition < - 17.0) {
                     positionSkystone = "Right";
                 }
 

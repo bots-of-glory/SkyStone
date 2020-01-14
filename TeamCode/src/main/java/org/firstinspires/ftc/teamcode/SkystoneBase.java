@@ -2,29 +2,34 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
+
+import java.lang.reflect.Method;
 
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.*;
 
 public class SkystoneBase extends LinearOpMode {
 
-    DcMotor liftMotor;
+    DcMotor lift1;
+    DcMotor lift2;
     DcMotor frontLeft;
     DcMotor rearLeft;
     DcMotor frontRight;
     DcMotor rearRight;
     Servo leftServo;
     Servo rightServo;
-    GyroSensor sensorGyro;
-    ModernRoboticsI2cGyro mrGyro;
     PlayfieldSide playSide;
+    private CRServo clawServo;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,18 +41,24 @@ public class SkystoneBase extends LinearOpMode {
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
+        lift1 = hardwareMap.dcMotor.get("lift1");
+        lift2 = hardwareMap.dcMotor.get("lift2");
         //sensorGyro = hardwareMap.gyroSensor.get("gyro");
         leftServo = hardwareMap.servo.get("leftServo");
         rightServo = hardwareMap.servo.get("rightServo");
+        clawServo = hardwareMap.crservo.get("clawservo");
 
         //declare motor directions
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearRight.setDirection(DcMotor.Direction.FORWARD);
+        lift1.setDirection(DcMotor.Direction.FORWARD);
+        lift2.setDirection(DcMotor.Direction.REVERSE);
         //liftMotor.setDirection(DcMotor.Direction.REVERSE);
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(CRServo.Direction.FORWARD);
 
         //mrGyro = (ModernRoboticsI2cGyro) sensorGyro;
         telemetry.addLine("End moveToPlatform " + playSide.toString());
@@ -59,19 +70,23 @@ public class SkystoneBase extends LinearOpMode {
 
     public void moveToPlatform() {
         telemetry.addLine("Begin moveToPlatform " + playSide.toString());
-        int strafeToPosition = AutonomousCommon.convertInchesToPosition(13.0,true);
-        int backupPosition = AutonomousCommon.convertInchesToPosition(36.0,false);
-        int forwardPosition = AutonomousCommon.convertInchesToPosition(2.0,false);
-        double power = 1.0;
+        //int strafeToPosition = AutonomousCommon.convertInchesToPosition(13.0,true);
+        //int backupPosition = AutonomousCommon.convertInchesToPosition(36.0,false);
+        //int forwardPosition = AutonomousCommon.convertInchesToPosition(2.0,false);
+        double power = 0.6;
         try {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, forwardPosition, power, opModeIsActive(), telemetry);
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 2, power, opModeIsActive(), telemetry);
             if (playSide == PlayfieldSide.Blue) {
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, strafeToPosition, power, opModeIsActive(), telemetry);
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, 13, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 30, power, opModeIsActive(), telemetry);
+                AutonomousCommon.servoMovement(leftServo, 90);
+                AutonomousCommon.servoMovement(rightServo, -90);
             }
             if (playSide == PlayfieldSide.Red) {
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, strafeToPosition, power, opModeIsActive(), telemetry);
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, backupPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, 12, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 30, power, opModeIsActive(), telemetry);
+                AutonomousCommon.servoMovement(leftServo, 90);
+                AutonomousCommon.servoMovement(rightServo, -90);
             }
         }catch (InterruptedException ex){
 
@@ -97,14 +112,14 @@ public class SkystoneBase extends LinearOpMode {
      */
     public void moveToSkybridge() {
         telemetry.addLine("Begin moveToSkybridge");
-        int forwardPosition = convertInchesToPosition(51,true);
-        double power = 1.0;
+        //int forwardPosition = convertInchesToPosition(51,true);
+        double power = 0.6;
         try{
             if (playSide==PlayfieldSide.Blue) {
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, forwardPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 60, power, opModeIsActive(), telemetry);
             }
             if (playSide==PlayfieldSide.Red) {
-                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, forwardPosition, power, opModeIsActive(), telemetry);
+                macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 60, power, opModeIsActive(), telemetry);
         }
         }catch (InterruptedException ex){
 
@@ -117,17 +132,34 @@ public class SkystoneBase extends LinearOpMode {
      */
     public void movePlatformToBuildingSite(){
         telemetry.addLine("Begin movePlatformToBuildingSite");
-        int towToWall = AutonomousCommon.convertInchesToPosition(38.0,false);
-        int towForward = AutonomousCommon.convertInchesToPosition(1,false);
-        double power = 1.0;
+        double power = 0.6;
         try{
-            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,towToWall,power,opModeIsActive(),telemetry);
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,35,0.6,opModeIsActive(),telemetry);
+            if (playSide==PlayfieldSide.Blue) {
+                macanumRotate(frontLeft,rearLeft,frontRight,rearRight, 100,opModeIsActive(),telemetry,RotateDegree.Negative);
+            }
+            if (playSide==PlayfieldSide.Red) {
+                macanumRotate(frontLeft,rearLeft,frontRight,rearRight, 100,opModeIsActive(),telemetry,RotateDegree.Positive);
+            }
             AutonomousCommon.servoMovement(leftServo, 90);
             AutonomousCommon.servoMovement(rightServo, -90);
-            sleep(2000); //wait
-            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,towForward,power,opModeIsActive(),telemetry);
+            sleep(1000); //wait
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,2,0.6,opModeIsActive(),telemetry);
+            AutonomousCommon.servoMovement(leftServo, -90);
+            AutonomousCommon.servoMovement(rightServo, 90);
+            sleep(1000); //wait
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,30,0.6,opModeIsActive(),telemetry);
+
+
+            if (playSide==PlayfieldSide.Blue) {
+                macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,20,0.6,opModeIsActive(),telemetry);
+            }
+            if (playSide==PlayfieldSide.Red){
+                macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,20,0.6,opModeIsActive(),telemetry);
+            }
+            sleep(1000); //wait
             telemetry.addLine("End movePlatformToBuildingSite");
-        }catch (InterruptedException ex){
+        } catch (InterruptedException ex){
 
         }
     }
@@ -135,29 +167,53 @@ public class SkystoneBase extends LinearOpMode {
     /**
      * Moves the robot to the Legos.
      */
-    public void moveToLegos(){
+    public void moveToLegos() throws InterruptedException {
         telemetry.addLine("Begin moveToLegos");
+        if (playSide==PlayfieldSide.Red) {
+            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, 5, 0.6, opModeIsActive(), telemetry);
+            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 25, 0.6, opModeIsActive(), telemetry);
+        }
+        if (playSide==PlayfieldSide.Blue) {
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,5,0.6,opModeIsActive(),telemetry);
+            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 25, 0.6, opModeIsActive(), telemetry);
 
+
+        }
         telemetry.addLine("End moveToLegos");
     }
 
     /**
      * Grabs the lego.
      */
-    public void grabLego(VUPosition position){
+    public void grabLego() throws InterruptedException{
         telemetry.addLine("Begin grabLego");
 
+        if (playSide ==PlayfieldSide.Red) {
+                clawServo.setPower(-1.0);
+        }
+        if (playSide == PlayfieldSide.Blue) {
+                clawServo.setPower(-1.0);
+        }
+        Thread.sleep(2000);
         telemetry.addLine("End grabLego");
     }
 
     /**
      * moves the robot to the building zone.
      */
-    public void moveToBuildingZone(){
+    public void moveToBuildingZone() throws InterruptedException{
         telemetry.addLine("Begin moveToBuildingZone");
         if(playSide==PlayfieldSide.Blue){
+            clawServo.setPower(-1.0);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Positive);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,60,0.6,opModeIsActive(),telemetry);
         }
         if(playSide==PlayfieldSide.Red){
+            clawServo.setPower(-1.0);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Negative);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,125,0.6,opModeIsActive(),telemetry);
         }
         telemetry.addLine("End moveToBuildingZone");
     }
@@ -165,8 +221,22 @@ public class SkystoneBase extends LinearOpMode {
     /**
      * Drops the lego.
      */
-    public void dropLego() {
+    public void dropLego() throws InterruptedException {
         telemetry.addLine("Begin dropLego");
+        if(playSide==PlayfieldSide.Blue){
+            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Negative);
+            AutonomousCommon.motorLift(lift1,lift2,opModeIsActive(),telemetry);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,25,0.6,opModeIsActive(),telemetry);
+            clawServo.setPower(1.0);
+
+        }
+        if (playSide==PlayfieldSide.Red){
+            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Positive);
+            AutonomousCommon.motorLift(lift1,lift2,opModeIsActive(),telemetry);
+            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,25,0.6,opModeIsActive(),telemetry);
+            clawServo.setPower(1.0);
+
+        }
         telemetry.addLine("End dropLego");
     }
     /**
