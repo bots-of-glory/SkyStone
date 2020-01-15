@@ -354,12 +354,12 @@ public class SkystoneFinder extends SkystoneBase {
                 double xPosition = translation.get(0);
                 if (xPosition < 16.3) {
                     positionSkystone = "left";
-                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
+                    //AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
                 } else if (xPosition <16.5) {
-                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
+                    //AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
                     positionSkystone = "center";
                 } else if (xPosition < - 17.0) {
-                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
+                    //AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
                     positionSkystone = "Right";
                 }
 

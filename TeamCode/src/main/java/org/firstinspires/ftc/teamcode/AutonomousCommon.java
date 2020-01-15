@@ -15,10 +15,10 @@ public class AutonomousCommon {
                                   DcMotor frontRight, DcMotor rearRight,
                                   int targetPosition, double power, boolean opModeIsActive,
                                   Telemetry telemetry) throws InterruptedException{
-        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
 
     }
     public static void motorLift(DcMotor lift1,DcMotor lift2,boolean opModeIsActive, Telemetry telemetry) throws InterruptedException {
@@ -66,12 +66,12 @@ public class AutonomousCommon {
         telemetry.update();
     }
     public static void macanumMovementTimeBased(DcMotor frontLeft, DcMotor rearLeft,
-                                                DcMotor frontRight, DcMotor rearRight,
-                                                StrafeDirection strafeDirection,
-                                                int inches, double power, boolean opModeIsActive,
-                                                Telemetry telemetry) throws InterruptedException{
+                                       DcMotor frontRight, DcMotor rearRight,
+                                       StrafeDirection strafeDirection,
+                                       int inches, double power, boolean opModeIsActive,
+                                       Telemetry telemetry) throws InterruptedException{
 
-        telemetry.addLine("Begin macanumMovementTimeBased");
+        telemetry.addLine("Begin macanumMovement");
         telemetry.update();
         //rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -117,6 +117,7 @@ public class AutonomousCommon {
                 frontRight.setPower(-frontPower);
                 break;
         }
+
         if(strafeDirection == StrafeDirection.Right || strafeDirection == StrafeDirection.Left)
         {
             //1 sec = 51 inches
@@ -141,22 +142,22 @@ public class AutonomousCommon {
         frontLeft.setPower(0);
         frontRight.setPower(0);
         Thread.sleep(500);
-        telemetry.addLine("End macanumMovementTimeBased");
+        telemetry.addLine("End macanumMovement");
         telemetry.update();
     }
-    public static void macanumMovementEncoded(DcMotor frontLeft, DcMotor rearLeft,
+    public static void macanumMovement(DcMotor frontLeft, DcMotor rearLeft,
                                        DcMotor frontRight, DcMotor rearRight,
                                        StrafeDirection strafeDirection,
-                                       int targetPosition, double power, boolean opModeIsActive,
+                                       int inches, double power, boolean opModeIsActive,
                                        Telemetry telemetry) {
 
-        telemetry.addLine("Begin macanumMovementTimeBased");
+        telemetry.addLine("Begin macanumMovement");
         telemetry.update();
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
 
         switch (strafeDirection) {
             case Left:
@@ -217,7 +218,7 @@ public class AutonomousCommon {
         frontLeft.setPower(0);
         frontRight.setPower(0);
 
-        telemetry.addLine("End macanumMovementTimeBased");
+        telemetry.addLine("End macanumMovement");
         telemetry.update();
     }
     public static void servoMovement(Servo servo, double position) {
@@ -248,7 +249,6 @@ public class AutonomousCommon {
 
         return returnValue;
     }
-
 
     public enum StrafeDirection{
         Left,

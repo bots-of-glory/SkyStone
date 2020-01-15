@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name="Rotate_Test", group="testOp")
-public class Rotate_Test extends SkystoneBase {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp (name="Test_Rotate", group="testOp")
+public class Test_Rotate extends SkystoneBase {
     @Override
     public void runOpMode() throws InterruptedException {
         this.playSide = AutonomousCommon.PlayfieldSide.Blue;
