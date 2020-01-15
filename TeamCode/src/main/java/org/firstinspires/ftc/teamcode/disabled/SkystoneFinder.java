@@ -27,14 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -42,6 +41,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.AutonomousCommon;
+import org.firstinspires.ftc.teamcode.SkystoneBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,12 +83,19 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
-public class skystoneDetection extends LinearOpMode {
+@Disabled
+@TeleOp(name="SKYSTONE Vuforia Nav", group ="Concept")
+public class SkystoneFinder extends SkystoneBase {
 
-    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+    // IMPORTANT:  For Phone Camera, set 1) the camera source and 2) the orientation, based on how your phone is mounted:
+    // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
+    // 2) Phone Orientation. Choices are: PHONE_IS_PORTRAIT = true (portrait) or PHONE_IS_PORTRAIT = false (landscape)
+    //
+    // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+    //
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false  ;
+    private static final boolean PHONE_IS_PORTRAIT = true;
+
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
      * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
@@ -102,6 +110,7 @@ public class skystoneDetection extends LinearOpMode {
      */
     private static final String VUFORIA_KEY =
             "AZLRyGv/////AAABmUBYMKfdK0Aomzp0Nt6VEkguSViSeAoA+D5usIvm/kqre4G73/hhstqirGs3OdwbEScv9C37DcPjYjTLiH/InhJiNOZ2sCHrUQ/pjXVvB+yUgmXFKdyUsiZNDNJgnyc7CnBFQ6FyrVRsLEv7vg17WNPdh7mgumtlb2LwD0N0m1D9ntZg90cLxto9GTfr+V6xS0k/NEsBPuljDPx2Hql3GAD39HZ3Ls62r306oUm9g+UVFNNUdKuvGc3xxtrTQAZHSzjufW7N232cZTPWyE508Bh8sKWUCJMB7ZuQ7TPZqS+VWPMdxUo9N//J5iHFoDidnjHb5Z6d2qKmqDk3/rIa5pdzc5bY+fhkr27+SegoN7WK";
+
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
     private static final float mmPerInch        = 25.4f;
@@ -124,24 +133,14 @@ public class skystoneDetection extends LinearOpMode {
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
-
-    /**
-     * This is the webcam we are to use. As with other hardware devices such as motors and
-     * servos, this device is identified using the robot configuration tool in the FTC application.
-     */
-    WebcamName testCam = null;
-
     private boolean targetVisible = false;
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
-    @Override public void runOpMode() {
-        /*
-         * Retrieve the camera we are to use.
-         */
-        testCam = hardwareMap.get(WebcamName.class, "testCam");
-
+    @Override public void runOpMode() throws InterruptedException {
+        //this.playSide = AutonomousCommon.PlayfieldSide.Blue;
+        initMotors();
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
@@ -153,11 +152,7 @@ public class skystoneDetection extends LinearOpMode {
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-
-        /**
-         * We also indicate which camera on the RC we wish to use.
-         */
-        parameters.cameraName = testCam;
+        parameters.cameraDirection   = CAMERA_CHOICE;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -300,7 +295,7 @@ public class skystoneDetection extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
@@ -333,6 +328,9 @@ public class skystoneDetection extends LinearOpMode {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+                    if (trackable.getName().equals("Stone Target")) {
+                        telemetry.addLine("Skystone is visible");
+                    }
                     targetVisible = true;
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
@@ -346,19 +344,37 @@ public class skystoneDetection extends LinearOpMode {
             }
 
             // Provide feedback as to where the robot is located (if we know).
+            String positionSkystone = "";
             if (targetVisible) {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
+                double xPosition = translation.get(0);
+                if (xPosition < 16.3) {
+                    positionSkystone = "left";
+                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
+                } else if (xPosition <16.5) {
+                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
+                    positionSkystone = "center";
+                } else if (xPosition < - 17.0) {
+                    //AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
+                    positionSkystone = "Right";
+                }
+
+
+
+
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
+                positionSkystone = "right";
                 telemetry.addData("Visible Target", "none");
             }
+            telemetry.addData("Skystone Position is ", positionSkystone);
             telemetry.update();
         }
 
@@ -366,3 +382,4 @@ public class skystoneDetection extends LinearOpMode {
         targetsSkyStone.deactivate();
     }
 }
+

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -45,7 +45,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
         import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
         import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
         import org.firstinspires.ftc.robotcore.external.navigation.VuforiaSkyStone;
-
+@Disabled
 @Autonomous
 public class vuforiapixeltest extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";

@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode;
 //test
 
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.util.List;
 
 public class AutonomousCommon {
 
@@ -18,10 +15,10 @@ public class AutonomousCommon {
                                   DcMotor frontRight, DcMotor rearRight,
                                   int targetPosition, double power, boolean opModeIsActive,
                                   Telemetry telemetry) throws InterruptedException{
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
-        macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, targetPosition, power, opModeIsActive, telemetry);
+        macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, targetPosition, power, opModeIsActive, telemetry);
 
     }
     public static void motorLift(DcMotor lift1,DcMotor lift2,boolean opModeIsActive, Telemetry telemetry) throws InterruptedException {
@@ -68,13 +65,13 @@ public class AutonomousCommon {
         telemetry.addLine("End macanumRotate");
         telemetry.update();
     }
-    public static void macanumMovement(DcMotor frontLeft, DcMotor rearLeft,
-                                       DcMotor frontRight, DcMotor rearRight,
-                                       StrafeDirection strafeDirection,
-                                       int inches, double power, boolean opModeIsActive,
-                                       Telemetry telemetry) throws InterruptedException{
+    public static void macanumMovementTimeBased(DcMotor frontLeft, DcMotor rearLeft,
+                                                DcMotor frontRight, DcMotor rearRight,
+                                                StrafeDirection strafeDirection,
+                                                int inches, double power, boolean opModeIsActive,
+                                                Telemetry telemetry) throws InterruptedException{
 
-        telemetry.addLine("Begin macanumMovement");
+        telemetry.addLine("Begin macanumMovementTimeBased");
         telemetry.update();
         //rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -144,7 +141,7 @@ public class AutonomousCommon {
         frontLeft.setPower(0);
         frontRight.setPower(0);
         Thread.sleep(500);
-        telemetry.addLine("End macanumMovement");
+        telemetry.addLine("End macanumMovementTimeBased");
         telemetry.update();
     }
     public static void macanumMovementEncoded(DcMotor frontLeft, DcMotor rearLeft,
@@ -153,7 +150,7 @@ public class AutonomousCommon {
                                        int targetPosition, double power, boolean opModeIsActive,
                                        Telemetry telemetry) {
 
-        telemetry.addLine("Begin macanumMovement");
+        telemetry.addLine("Begin macanumMovementTimeBased");
         telemetry.update();
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -220,7 +217,7 @@ public class AutonomousCommon {
         frontLeft.setPower(0);
         frontRight.setPower(0);
 
-        telemetry.addLine("End macanumMovement");
+        telemetry.addLine("End macanumMovementTimeBased");
         telemetry.update();
     }
     public static void servoMovement(Servo servo, double position) {

@@ -9,8 +9,8 @@ public class Calibration_Straight extends SkystoneBase {
         waitForStart();
         int calibrationTest = (AutonomousCommon.convertInchesToPosition(10, false));
         int strafeTest = (AutonomousCommon.convertInchesToPosition(10,true));
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,10,.6,opModeIsActive(), telemetry);
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,10,.6,opModeIsActive(),telemetry);
+        AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Forward,10,.6,opModeIsActive(), telemetry);
+        AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,10,.6,opModeIsActive(),telemetry);
 
     }
 

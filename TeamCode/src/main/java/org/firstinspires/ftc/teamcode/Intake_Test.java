@@ -30,9 +30,9 @@ public class Intake_Test extends LinearOpMode {
             intake2.setPower(1 * gamepad1.right_stick_y*0.3);
 
         }
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,2600,0.6,true, telemetry);
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,2600,0.6,true, telemetry);
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Left,2600,0.6,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,2600,0.6,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,2600,0.6,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Left,2600,0.6,true, telemetry);
         //AutonomousCommon.macanumBox(frontLeft,rearLeft,frontRight,rearRight,1000,.3,true, telemetry);
 
 

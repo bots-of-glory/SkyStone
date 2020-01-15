@@ -1,11 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.AutonomousCommon;
 import org.firstinspires.ftc.teamcode.vision.MasterVision;
 import org.firstinspires.ftc.teamcode.vision.SampleRandomizedPositions;
+@Disabled
 @Autonomous (name="Prototype", group="Competition Autonomous")
 public class Prototype extends LinearOpMode {
     MasterVision vision;
@@ -37,10 +41,10 @@ public class Prototype extends LinearOpMode {
         int target = 0;
 
         waitForStart();
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,1000,1.0,true, telemetry);
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,2600,0.6,true, telemetry);
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,2600,0.6,true, telemetry);
-        // AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Left,2600,0.6,true, telemetry);
+        AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,1000,1.0,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,2600,0.6,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,2600,0.6,true, telemetry);
+        // AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Left,2600,0.6,true, telemetry);
         //AutonomousCommon.macanumBox(frontLeft,rearLeft,frontRight,rearRight,1000,.3,true, telemetry);
 
 

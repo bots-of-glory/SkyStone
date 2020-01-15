@@ -5,30 +5,23 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
 
-@Disabled
+
 @Autonomous (name="LoadingZoneBlue", group="Competition Autonomous")
 public class LoadingZoneBlue extends SkystoneVisionBase{
 
     @Override
     public void runOpMode() throws InterruptedException {
         this.playSide = PlayfieldSide.Blue;
-        //AutonomousCommon.VUPosition position;
+        AutonomousCommon.VUPosition position;
+
         initMotors();
         waitForStart();
-        //tempSkybridgeParkAway();
-        //1st Skystone
+
         moveToLegos();
-        // = locateSkystone();
-        grabLego();
+        position= locateSkystone();
+        grabLego(position);
         moveToBuildingZone();
         dropLego();
-
-        //2nd Skystone
-       // moveToLegos();
-        //position= locateSkystone();
-        //grabLego();
-       // moveToBuildingZone();
-       // dropLego();
 
     }
 }
