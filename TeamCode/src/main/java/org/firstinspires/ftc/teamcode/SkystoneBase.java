@@ -305,6 +305,7 @@ public class SkystoneBase extends LinearOpMode {
         }
         telemetry.addLine("End dropLego");
     }
+
     /**
      * Temporary method.
      */

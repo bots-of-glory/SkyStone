@@ -17,6 +17,7 @@ public class Test_Straight extends SkystoneBase {
         //rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        
         int target = 1000;
         int startPosition = frontLeft.getCurrentPosition();
         frontLeft.setPower(.6);
