@@ -204,15 +204,16 @@ public class AutonomousCommon {
         rearRight.setPower(power);
         frontLeft.setPower(power);
         frontRight.setPower(power);
-
-        while (rearLeft.isBusy() && opModeIsActive) {
+        while (rearLeft.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
         }
-        while (rearRight.isBusy() && opModeIsActive) {
-        }
-        while (frontLeft.isBusy() && opModeIsActive) {
-        }
-        while (frontRight.isBusy() && opModeIsActive) {
-        }
+//        while (rearLeft.isBusy() && opModeIsActive) {
+//        }
+//        while (rearRight.isBusy() && opModeIsActive) {
+//        }
+//        while (frontLeft.isBusy() && opModeIsActive) {
+//        }
+//        while (frontRight.isBusy() && opModeIsActive) {
+//        }
         rearLeft.setPower(0);
         rearRight.setPower(0);
         frontLeft.setPower(0);
