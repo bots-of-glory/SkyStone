@@ -10,14 +10,13 @@ public class BuildingZoneRed extends SkystoneBase {
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         this.playSide = PlayfieldSide.Red;
         initMotors();
         waitForStart();
         moveToPlatformTimeBased();
         lowerFlappers();
-        moveToPlatformTimeBased();
+        movePlatformToBuildingSiteTimeBased();
         moveToSkybridgeTimeBased();
-
     }
 }

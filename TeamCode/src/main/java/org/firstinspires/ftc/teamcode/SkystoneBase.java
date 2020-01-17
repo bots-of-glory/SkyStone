@@ -189,7 +189,39 @@ public class SkystoneBase extends LinearOpMode {
 
         }
     }
+    public void movePlatformToBuildingSiteTimeBased(){
+        telemetry.addLine("Begin movePlatformToBuildingSite");
+        double power = 0.6;
+        try{
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,35,0.6,opModeIsActive(),telemetry);
+            if (playSide==PlayfieldSide.Blue) {
+                macanumRotate(frontLeft,rearLeft,frontRight,rearRight, 100,opModeIsActive(),telemetry,RotateDegree.Negative);
+            }
+            if (playSide==PlayfieldSide.Red) {
+                macanumRotate(frontLeft,rearLeft,frontRight,rearRight, 100,opModeIsActive(),telemetry,RotateDegree.Positive);
+            }
+            servoMovement(leftServo, 90);
+            servoMovement(rightServo, -90);
+            sleep(1000); //wait
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,2,0.6,opModeIsActive(),telemetry);
+            servoMovement(leftServo, -90);
+            servoMovement(rightServo, 90);
+            sleep(1000); //wait
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,30,0.6,opModeIsActive(),telemetry);
 
+
+            if (playSide==PlayfieldSide.Blue) {
+                macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Right,20,0.6,opModeIsActive(),telemetry);
+            }
+            if (playSide==PlayfieldSide.Red){
+                macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,20,0.6,opModeIsActive(),telemetry);
+            }
+            sleep(1000); //wait
+            telemetry.addLine("End movePlatformToBuildingSite");
+        } catch (InterruptedException ex){
+
+        }
+    }
     /**
      * Moves the robot to the Legos.
      */
