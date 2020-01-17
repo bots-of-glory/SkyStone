@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -28,10 +29,16 @@ public class DriverControl extends LinearOpMode {
     private Servo rightServo;
     private CRServo clawServo;
     //private CRServo clawExtendServo;
+    private boolean alarmFound;
+
 
 
     @Override
     public void runOpMode () throws InterruptedException {
+        //Declare Sound
+        int alarmSoundID   = hardwareMap.appContext.getResources().getIdentifier("alarmSound",   "raw", hardwareMap.appContext.getPackageName());
+        if (alarmSoundID != 0)
+            alarmFound   = SoundPlayer.getInstance().preload(hardwareMap.appContext, alarmSoundID);
         //Declare DcMotors
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -91,6 +98,9 @@ public class DriverControl extends LinearOpMode {
         int flipperState = 0;
         boolean buttonState = false;
         {
+
+            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, alarmSoundID);
+
             waitForStart();
             while (opModeIsActive()) {
 //-----------------------------------Gamepad 1 Start------------------------------------------------
