@@ -218,29 +218,29 @@ public class VisionBaseTensorFlow extends SkystoneBase {
             } else {
                 inPosition = false;
             }
-        }
-        if (playSide == PlayfieldSide.Red) {
-            //Strafe Right until object is seen
 
-            while (hitWall == false && inPosition == false) {
-                rearLeft.setPower(5);
-                rearRight.setPower(-5);
-                frontLeft.setPower(-5);
-                frontRight.setPower(5);
+            if (playSide == PlayfieldSide.Red) {
+                //Strafe Right until object is seen
+
+                while (hitWall == false && inPosition == false) {
+                    rearLeft.setPower(5);
+                    rearRight.setPower(-5);
+                    frontLeft.setPower(-5);
+                    frontRight.setPower(5);
+                }
+            }
+            if (playSide == PlayfieldSide.Blue) {
+                //Strafe Left until object is seen
+
+                while (hitWall == false && inPosition == false) {
+                    rearLeft.setPower(-5);
+                    rearRight.setPower(5);
+                    frontLeft.setPower(5);
+                    frontRight.setPower(-5);
+
+                }
+
             }
         }
-        if (playSide == PlayfieldSide.Blue) {
-            //Strafe Left until object is seen
-
-            while (hitWall == false && inPosition == false){
-            rearLeft.setPower(-5);
-            rearRight.setPower(5);
-            frontLeft.setPower(5);
-            frontRight.setPower(-5);
-
-        }
     }
-
-    }
-
 }
