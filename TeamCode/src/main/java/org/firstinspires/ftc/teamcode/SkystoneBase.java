@@ -245,28 +245,45 @@ public class SkystoneBase extends LinearOpMode {
     public void moveToScanPosition() throws InterruptedException {
         telemetry.addLine("Begin moveToLegos");
         if (playSide==PlayfieldSide.Red) {
-            //AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, 5, 0.6, opModeIsActive(), telemetry);
-            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
         }
         if (playSide==PlayfieldSide.Blue) {
-            //AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,5,0.6,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
 
 
         }
         telemetry.addLine("End moveToLegos");
     }
-    public void moveToLegosFromScanPosition() throws InterruptedException {
+    public void moveToScanPositionTimeBased() throws InterruptedException {
         telemetry.addLine("Begin moveToLegos");
         if (playSide==PlayfieldSide.Red) {
-            //AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, 5, 0.6, opModeIsActive(), telemetry);
-            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
         }
         if (playSide==PlayfieldSide.Blue) {
-            //AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Left,5,0.6,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
 
 
+        }
+        telemetry.addLine("End moveToLegos");
+    }
+    public void moveToLegosFromScanPosition()  {
+        telemetry.addLine("Begin moveToLegos");
+        if (playSide==PlayfieldSide.Red) {
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
+        }
+        if (playSide==PlayfieldSide.Blue) {
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
+        }
+        telemetry.addLine("End moveToLegos");
+    }
+
+    public void moveToLegosFromScanPositionTimeBased() throws InterruptedException {
+        telemetry.addLine("Begin moveToLegos");
+        if (playSide==PlayfieldSide.Red) {
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
+        }
+        if (playSide==PlayfieldSide.Blue) {
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 12, 0.6, opModeIsActive(), telemetry);
         }
         telemetry.addLine("End moveToLegos");
     }
@@ -299,23 +316,38 @@ public class SkystoneBase extends LinearOpMode {
     /**
      * moves the robot to the building zone.
      */
-    public void moveToBuildingZone() throws InterruptedException{
+    public void moveToBuildingZone() throws InterruptedException {
         telemetry.addLine("Begin moveToBuildingZone");
         if(playSide==PlayfieldSide.Blue){
             clawServo.setPower(-1.0);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Positive);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,60,0.6,opModeIsActive(),telemetry);
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Positive);
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,60,0.6,opModeIsActive(),telemetry);
         }
         if(playSide==PlayfieldSide.Red){
             clawServo.setPower(-1.0);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
-            AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Negative);
-            AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,125,0.6,opModeIsActive(),telemetry);
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Negative);
+            macanumMovement(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,125,0.6,opModeIsActive(),telemetry);
         }
         telemetry.addLine("End moveToBuildingZone");
     }
-
+    public void moveToBuildingZoneTimeBased() throws InterruptedException{
+        telemetry.addLine("Begin moveToBuildingZone");
+        if(playSide==PlayfieldSide.Blue){
+            clawServo.setPower(-1.0);
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Positive);
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,60,0.6,opModeIsActive(),telemetry);
+        }
+        if(playSide==PlayfieldSide.Red){
+            clawServo.setPower(-1.0);
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+            macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry,RotateDegree.Negative);
+            macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,StrafeDirection.Forward,125,0.6,opModeIsActive(),telemetry);
+        }
+        telemetry.addLine("End moveToBuildingZone");
+    }
     /**
      * Drops the lego.
      */

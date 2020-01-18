@@ -300,10 +300,6 @@ public class SkystoneVisionBase extends SkystoneBase {
                 } else if (xPosition < -16.5) {
                     pos.direction = Right;
                 }
-
-
-
-
             }
             else {
                 telemetry.addData("Visible Target", "none");
