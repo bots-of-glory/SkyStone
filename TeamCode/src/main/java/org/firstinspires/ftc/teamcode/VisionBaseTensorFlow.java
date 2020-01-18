@@ -27,22 +27,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.disabled;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.AutonomousCommon;
 import org.firstinspires.ftc.teamcode.SkystoneBase;
+import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
 
 import java.util.List;
 
@@ -56,14 +53,15 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
-public class ConceptTensorFlowObjectDetectionWebcam extends SkystoneBase {
+@Autonomous(name = "VisionBaseTensorFlow", group = "Concept")
+public class VisionBaseTensorFlow extends SkystoneBase {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
     boolean inPosition;
     boolean hitWall;
-    DigitalChannel digitalTouch;
+    DigitalChannel digitalTouchLeft;
+    DigitalChannel digitalTouchRight;
     DcMotor frontLeft;
     DcMotor rearLeft;
     DcMotor frontRight;
@@ -179,10 +177,12 @@ public class ConceptTensorFlowObjectDetectionWebcam extends SkystoneBase {
 
 
 
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+        digitalTouchRight = hardwareMap.get(DigitalChannel.class, "digitalTouchRight");
+        digitalTouchLeft = hardwareMap.get(DigitalChannel.class, "digitalTouchLeft");
 
         // set the digital channel to input.
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+        digitalTouchRight.setMode(DigitalChannel.Mode.INPUT);
+        digitalTouchLeft.setMode(DigitalChannel.Mode.INPUT);
 
 
         // while the op mode is active, loop and read the touch sensor levels.
@@ -191,33 +191,41 @@ public class ConceptTensorFlowObjectDetectionWebcam extends SkystoneBase {
 
         // send the info back to driver station using telemetry function.
         // if the digital channel returns true it's HIGH and the button is unpressed.
-        if (digitalTouch.getState() == true) {
-            telemetry.addData("Touch Sensor", "Is Not Pressed");
-            boolean hitWall = false;
-        } else {
-            telemetry.addData("Robot has hit the wall","Is Pressed");
-            boolean hitWall = true;
+      while (opModeIsActive()) {
+          if (digitalTouchLeft.getState() || digitalTouchRight.getState() == true) {
+              telemetry.addData("Robot has not hit wall", "Is Not Pressed");
+              hitWall = false;
+          } else {
+              telemetry.addData("Robot has hit the wall", "Is Pressed");
+              hitWall = true;
 
-            telemetry.update();
-        }    if (inPosition == true) {
-            tfod.shutdown();
+              telemetry.update();
+          }
+          if (inPosition == true) {
+              tfod.shutdown();
+          }
+
+
+          //adding strafing and telemetry
+          if (hitWall && inPosition == false) {
+              //Strafe left or right depending on side (using encoders)
+          } else if (hitWall == true) {
+              //end tensorflow
+              //grab current lego
+          }
+
+          if (tfod.equals(LABEL_SECOND_ELEMENT)) {
+              inPosition = true;
+          } else {
+              inPosition = false;
+          }
+      }
+        if (playSide == PlayfieldSide.Red) {
+            //Strafe Right until object is seen
         }
+        if (playSide == PlayfieldSide.Blue) {
+            //Strafe Left until object is seen
 
-        //adding strafing and telemetry
-        if (hitWall && inPosition == false) {
-            //Strafe left or right depending on side (using encoders)
-        } else if ( hitWall == true) {
-            //end tensorflow
-            //grab current lego
-        }
-
-
-
-
-        if (tfod.equals(LABEL_SECOND_ELEMENT)) {
-            Boolean inPosition = true;
-        } else {
-            Boolean inPosition = false;
         }
 
 

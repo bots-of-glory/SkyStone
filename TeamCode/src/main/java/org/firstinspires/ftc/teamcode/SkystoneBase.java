@@ -19,7 +19,7 @@ public class SkystoneBase extends LinearOpMode {
     DcMotor rearRight;
     Servo leftServo;
     Servo rightServo;
-    PlayfieldSide playSide;
+    public PlayfieldSide playSide;
     private CRServo clawServo;
 
 
