@@ -255,7 +255,7 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         targetsSkyStone.activate();
         targetVisible = false;
-
+        //Add strafe slow
         boolean moveToPosition = false;
         while (!moveToPosition) {
 
@@ -287,21 +287,23 @@ public class SkystoneVisionBase extends SkystoneBase {
                     pos.direction = Left;
                 } else if (xPosition < 16.3 && xPosition > -16.5) {
                     pos.direction = Center;
+                    pos.x = xPosition;
+                    pos.z =zPosition;
+
+                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                    // express the rotation of the robot in degrees.
+                    Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                    telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                    moveToPosition = true;
                 } else if (xPosition < -16.5) {
                     pos.direction = Right;
                 }
 
-                pos.x = xPosition;
-                pos.z =zPosition;
 
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                // express the rotation of the robot in degrees.
-                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                Thread.sleep(5000);
-                moveToPosition = true;
+
             }
             else {
                 telemetry.addData("Visible Target", "none");

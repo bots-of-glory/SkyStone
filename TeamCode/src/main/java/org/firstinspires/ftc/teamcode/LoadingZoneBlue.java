@@ -16,7 +16,6 @@ public class LoadingZoneBlue extends SkystoneVisionBase{
 
         initMotors();
         waitForStart();
-
         moveToLegos();
         position= locateSkystone();
         grabLego(position);
