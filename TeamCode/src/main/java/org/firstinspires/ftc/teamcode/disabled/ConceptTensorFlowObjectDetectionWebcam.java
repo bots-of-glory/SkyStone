@@ -32,12 +32,17 @@ package org.firstinspires.ftc.teamcode.disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.AutonomousCommon;
+import org.firstinspires.ftc.teamcode.SkystoneBase;
 
 import java.util.List;
 
@@ -52,11 +57,17 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
-@Disabled
-public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
+public class ConceptTensorFlowObjectDetectionWebcam extends SkystoneBase {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Stone";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    boolean inPosition;
+    boolean hitWall;
+    DigitalChannel digitalTouch;
+    DcMotor frontLeft;
+    DcMotor rearLeft;
+    DcMotor frontRight;
+    DcMotor rearRight;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -158,12 +169,58 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
     /**
      * Initialize the TensorFlow Object Detection engine.
      */
-    private void initTfod() {
+    public void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
        tfodParameters.minimumConfidence = 0.4;
        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+
+
+
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "sensor_digital");
+
+        // set the digital channel to input.
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+
+
+        // while the op mode is active, loop and read the touch sensor levels.
+        // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
+
+
+        // send the info back to driver station using telemetry function.
+        // if the digital channel returns true it's HIGH and the button is unpressed.
+        if (digitalTouch.getState() == true) {
+            telemetry.addData("Touch Sensor", "Is Not Pressed");
+            boolean hitWall = false;
+        } else {
+            telemetry.addData("Robot has hit the wall","Is Pressed");
+            boolean hitWall = true;
+
+            telemetry.update();
+        }    if (inPosition == true) {
+            tfod.shutdown();
+        }
+
+        //adding strafing and telemetry
+        if (hitWall && inPosition == false) {
+            //Strafe left or right depending on side (using encoders)
+        } else if ( hitWall == true) {
+            //end tensorflow
+            //grab current lego
+        }
+
+
+
+
+        if (tfod.equals(LABEL_SECOND_ELEMENT)) {
+            Boolean inPosition = true;
+        } else {
+            Boolean inPosition = false;
+        }
+
+
     }
+
 }
