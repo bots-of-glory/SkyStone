@@ -36,9 +36,8 @@ public class DriverControl extends LinearOpMode {
     @Override
     public void runOpMode () throws InterruptedException {
         //Declare Sound
-        int alarmSoundID   = hardwareMap.appContext.getResources().getIdentifier("alarmSound",   "raw", hardwareMap.appContext.getPackageName());
-        if (alarmSoundID != 0)
-            alarmFound   = SoundPlayer.getInstance().preload(hardwareMap.appContext, alarmSoundID);
+        int alarmSoundID   = hardwareMap.appContext.getResources().getIdentifier("alarmsound",   "raw", hardwareMap.appContext.getPackageName());
+        int letitdieID   = hardwareMap.appContext.getResources().getIdentifier("letitdie",   "raw", hardwareMap.appContext.getPackageName());
         //Declare DcMotors
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
@@ -98,10 +97,11 @@ public class DriverControl extends LinearOpMode {
         int flipperState = 0;
         boolean buttonState = false;
         {
-
-            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, alarmSoundID);
+            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, letitdieID);
 
             waitForStart();
+            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, alarmSoundID);
+
             while (opModeIsActive()) {
 //-----------------------------------Gamepad 1 Start------------------------------------------------
                 //Speed

@@ -26,6 +26,8 @@ import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirectio
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirection.Left;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPoistionDirection.Right;
 import com.vuforia.CameraDevice;
+import com.vuforia.TargetFinder;
+
 /**
  * Base Class for Skystone operations that require vision (Vuforia)
  */
@@ -257,6 +259,8 @@ public class SkystoneVisionBase extends SkystoneBase {
         targetVisible = false;
         //TODO: Add strafe slow
         boolean moveToPosition = false;
+        double rearPower = 0.4;
+        double frontPower = 0.4;
         while (!moveToPosition) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -280,31 +284,52 @@ public class SkystoneVisionBase extends SkystoneBase {
             if (targetVisible) {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
-                double xPosition = translation.get(0);
-                double zPosition = translation.get(2);
-                if (xPosition > 16.3) {
+                double xPosition = translation.get(0)/ mmPerInch;
+                double zPosition = translation.get(2)/ mmPerInch;
+                int factor=3;
+                if (xPosition > 16.3+factor) {
                     pos.direction = Left;
-                } else if (xPosition < 16.3 && xPosition > -16.5) {
+                    //AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Left, moveTo, 0.6, opModeIsActive(), telemetry);
 
+                    //rearLeft.setPower(rearPower);
+                    //rearRight.setPower(-rearPower);
+                    //frontLeft.setPower(-frontPower);
+                   // frontRight.setPower(frontPower);
+                } else if (xPosition < 16.3+factor && xPosition > -16.5+factor) {
+
+                    //rearLeft.setPower(0);
+                    ///rearRight.setPower(0);
+                    //frontLeft.setPower(0);
+                    //frontRight.setPower(0);
                     pos.direction = Center;
-                    pos.x = xPosition;
-                    pos.z =zPosition;
-
-                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-                    // express the rotation of the robot in degrees.
-                    Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                    telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                    moveToPosition = true;
-                } else if (xPosition < -16.5) {
+                } else if (xPosition < -16.5+factor) {
+                    //rearLeft.setPower(-rearPower);
+                   // rearRight.setPower(rearPower);
+                    //frontLeft.setPower(frontPower);
+                    //frontRight.setPower(-frontPower);
                     pos.direction = Right;
+                    //AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, moveTo, 0.6, opModeIsActive(), telemetry);
+
                 }
+
+                pos.x = xPosition;
+                pos.z =zPosition;
+
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                // express the rotation of the robot in degrees.
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                moveToPosition = true;
             }
             else {
                 telemetry.addData("Visible Target", "none");
+
             }
+
             telemetry.update();
+
         }
 
         // Disable Tracking when we are done;
@@ -313,7 +338,7 @@ public class SkystoneVisionBase extends SkystoneBase {
         telemetry.addLine("x: " + pos.x);
         telemetry.addLine("z: " +pos.z);
         telemetry.addLine("z: " +pos.z);
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         targetsSkyStone.deactivate();
         return pos;
 

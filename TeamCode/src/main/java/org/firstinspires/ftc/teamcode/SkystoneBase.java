@@ -258,6 +258,7 @@ public class SkystoneBase extends LinearOpMode {
         telemetry.addLine("Begin moveToLegos");
         if (playSide==PlayfieldSide.Red) {
             macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+
         }
         if (playSide==PlayfieldSide.Blue) {
             macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
@@ -297,13 +298,13 @@ public class SkystoneBase extends LinearOpMode {
         if (playSide ==PlayfieldSide.Red) {
             //TODO: replace with this with move foraward since we should already be center
             if(position.direction==VUPoistionDirection.Left){
-                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
             }
             if(position.direction==VUPoistionDirection.Right){
-                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
             }
             if(position.direction==VUPoistionDirection.Center){
-                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
             }
                 clawServo.setPower(-1.0);
         }
@@ -313,7 +314,32 @@ public class SkystoneBase extends LinearOpMode {
         Thread.sleep(2000);
         telemetry.addLine("End grabLego");
     }
+    public void grabLegoTimeBased(VUPosition position) throws InterruptedException{
+        telemetry.addLine("Begin grabLego");
 
+        if (playSide ==PlayfieldSide.Red) {
+            //TODO: replace with this with move foraward since we should already be center
+            int moveTo=Math.abs((int)position.x) -11;
+           //telemetry.addLine(moveTo+"");
+            //telemetry.update();
+            //sleep(5000);
+            if(position.direction==VUPoistionDirection.Left){
+                macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,moveTo,.6,opModeIsActive(),telemetry);
+            }
+            if(position.direction==VUPoistionDirection.Right){
+                macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Right,moveTo,.6,opModeIsActive(),telemetry);
+            }
+            if(position.direction==VUPoistionDirection.Center){
+                //macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Forward,moveTo,.6,opModeIsActive(),telemetry);
+            }
+            clawServo.setPower(-1.0);
+        }
+        if (playSide == PlayfieldSide.Blue) {
+            clawServo.setPower(-1.0);
+        }
+        Thread.sleep(2000);
+        telemetry.addLine("End grabLego");
+    }
     /**
      * moves the robot to the building zone.
      */
