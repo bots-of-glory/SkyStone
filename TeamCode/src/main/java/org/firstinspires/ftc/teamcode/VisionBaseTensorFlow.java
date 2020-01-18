@@ -169,12 +169,11 @@ public class VisionBaseTensorFlow extends SkystoneBase {
      */
     public void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-       tfodParameters.minimumConfidence = 0.4;
-       tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-       tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-
+        tfodParameters.minimumConfidence = 0.4;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
 
 
         digitalTouchRight = hardwareMap.get(DigitalChannel.class, "digitalTouchRight");
@@ -191,43 +190,56 @@ public class VisionBaseTensorFlow extends SkystoneBase {
 
         // send the info back to driver station using telemetry function.
         // if the digital channel returns true it's HIGH and the button is unpressed.
-      while (opModeIsActive()) {
-          if (digitalTouchLeft.getState() || digitalTouchRight.getState() == true) {
-              telemetry.addData("Robot has not hit wall", "Is Not Pressed");
-              hitWall = false;
-          } else {
-              telemetry.addData("Robot has hit the wall", "Is Pressed");
-              hitWall = true;
+        while (opModeIsActive()) {
+            if (digitalTouchLeft.getState() || digitalTouchRight.getState() == true) {
+                telemetry.addData("Robot has not hit wall", "Is Not Pressed");
+                hitWall = false;
+            } else {
+                telemetry.addData("Robot has hit the wall", "Is Pressed");
+                hitWall = true;
 
-              telemetry.update();
-          }
-          if (inPosition == true) {
-              tfod.shutdown();
-          }
+                telemetry.update();
+            }
+            if (inPosition == true) {
+                tfod.shutdown();
+            }
 
 
-          //adding strafing and telemetry
-          if (hitWall && inPosition == false) {
-              //Strafe left or right depending on side (using encoders)
-          } else if (hitWall == true) {
-              //end tensorflow
-              //grab current lego
-          }
+            //adding strafing and telemetry
+            if (hitWall && inPosition == false) {
+                //Strafe left or right depending on side (using encoders)
+            } else if (hitWall == true) {
+                //end tensorflow
+                //grab current lego
+            }
 
-          if (tfod.equals(LABEL_SECOND_ELEMENT)) {
-              inPosition = true;
-          } else {
-              inPosition = false;
-          }
-      }
+            if (tfod.equals(LABEL_SECOND_ELEMENT)) {
+                inPosition = true;
+            } else {
+                inPosition = false;
+            }
+        }
         if (playSide == PlayfieldSide.Red) {
             //Strafe Right until object is seen
+
+            while (hitWall == false && inPosition == false) {
+                rearLeft.setPower(5);
+                rearRight.setPower(-5);
+                frontLeft.setPower(-5);
+                frontRight.setPower(5);
+            }
         }
         if (playSide == PlayfieldSide.Blue) {
             //Strafe Left until object is seen
 
-        }
+            while (hitWall == false && inPosition == false){
+            rearLeft.setPower(-5);
+            rearRight.setPower(5);
+            frontLeft.setPower(5);
+            frontRight.setPower(-5);
 
+        }
+    }
 
     }
 
