@@ -255,12 +255,11 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         targetsSkyStone.activate();
         targetVisible = false;
-        //Add strafe slow
+        //TODO: Add strafe slow
         boolean moveToPosition = false;
         while (!moveToPosition) {
 
             // check all the trackable targets to see which one (if any) is visible.
-
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
@@ -286,6 +285,7 @@ public class SkystoneVisionBase extends SkystoneBase {
                 if (xPosition > 16.3) {
                     pos.direction = Left;
                 } else if (xPosition < 16.3 && xPosition > -16.5) {
+
                     pos.direction = Center;
                     pos.x = xPosition;
                     pos.z =zPosition;

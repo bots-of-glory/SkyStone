@@ -295,6 +295,7 @@ public class SkystoneBase extends LinearOpMode {
         telemetry.addLine("Begin grabLego");
 
         if (playSide ==PlayfieldSide.Red) {
+            //TODO: replace with this with move foraward since we should already be center
             if(position.direction==VUPoistionDirection.Left){
                 AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
             }
