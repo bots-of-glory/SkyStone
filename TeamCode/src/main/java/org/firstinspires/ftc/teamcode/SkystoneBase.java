@@ -96,6 +96,8 @@ public class SkystoneBase extends LinearOpMode {
                 macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 30, power, opModeIsActive(), telemetry);
                 AutonomousCommon.servoMovement(leftServo, 90);
                 AutonomousCommon.servoMovement(rightServo, -90);
+
+
             }
             if (playSide == PlayfieldSide.Red) {
                 macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Left, 12, power, opModeIsActive(), telemetry);

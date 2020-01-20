@@ -57,7 +57,6 @@ import java.util.List;
 public class VisionBaseTensorFlow extends SkystoneBase {
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String LABEL_SECOND_ELEMENT = "Skystone";
-    boolean inPosition;
     boolean hitWall;
     DigitalChannel digitalTouchLeft;
     DigitalChannel digitalTouchRight;
@@ -136,6 +135,7 @@ public class VisionBaseTensorFlow extends SkystoneBase {
                       }
                       telemetry.update();
                     }
+
                 }
             }
         }
@@ -175,6 +175,7 @@ public class VisionBaseTensorFlow extends SkystoneBase {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_SECOND_ELEMENT);
 
 
+
         digitalTouchRight = hardwareMap.get(DigitalChannel.class, "digitalTouchRight");
         digitalTouchLeft = hardwareMap.get(DigitalChannel.class, "digitalTouchLeft");
 
@@ -190,7 +191,7 @@ public class VisionBaseTensorFlow extends SkystoneBase {
         // send the info back to driver station using telemetry function.
         // if the digital channel returns true it's HIGH and the button is unpressed.
         while (opModeIsActive()) {
-            if (digitalTouchLeft.getState() || digitalTouchRight.getState() == true) {
+            if (digitalTouchLeft.getState() == true || digitalTouchRight.getState() == true) {
                 telemetry.addData("Robot has not hit wall", "Is Not Pressed");
                 hitWall = false;
             } else {
@@ -199,29 +200,22 @@ public class VisionBaseTensorFlow extends SkystoneBase {
 
                 telemetry.update();
             }
-            if (inPosition == true) {
+            if (skystoneIsVisable(tfod.getRecognitions()) == true) {
                 tfod.shutdown();
             }
 
 
             //adding strafing and telemetry
-            if (hitWall && inPosition == false) {
+            if (hitWall && skystoneIsVisable(tfod.getRecognitions()) == false) {
                 //Strafe left or right depending on side (using encoders)
             } else if (hitWall == true) {
                 //end tensorflow
                 //grab current lego
             }
-
-            if (tfod.equals(LABEL_SECOND_ELEMENT)) {
-                inPosition = true;
-            } else {
-                inPosition = false;
-            }
-
             if (playSide == PlayfieldSide.Red) {
                 //Strafe Right until object is seen
 
-                while (hitWall == false && inPosition == false) {
+                while (hitWall == false && skystoneIsVisable(tfod.getRecognitions()) == false) {
                     rearLeft.setPower(5);
                     rearRight.setPower(-5);
                     frontLeft.setPower(-5);
@@ -231,7 +225,7 @@ public class VisionBaseTensorFlow extends SkystoneBase {
             if (playSide == PlayfieldSide.Blue) {
                 //Strafe Left until object is seen
 
-                while (hitWall == false && inPosition == false) {
+                while (hitWall == false && skystoneIsVisable(tfod.getRecognitions()) == false) {
                     rearLeft.setPower(-5);
                     rearRight.setPower(5);
                     frontLeft.setPower(5);
@@ -242,4 +236,15 @@ public class VisionBaseTensorFlow extends SkystoneBase {
             }
         }
     }
+    public boolean skystoneIsVisable(List <Recognition> recognition){
+        for(Recognition recog: recognition){
+            if(recog.getLabel().equals("Skystone")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 }
