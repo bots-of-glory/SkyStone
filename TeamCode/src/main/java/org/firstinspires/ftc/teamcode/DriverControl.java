@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.ftccommon.SoundPlayer;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.SampleRevBlinkinLedDriver;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.Deadline;
+
+import java.util.concurrent.TimeUnit;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp (name = "DriverControl" , group = "testOp")
 //@Disabled
@@ -30,6 +37,8 @@ public class DriverControl extends LinearOpMode {
     private CRServo clawServo;
     //private CRServo clawExtendServo;
     private boolean alarmFound;
+   RevBlinkinLedDriver blinkinLedDriver;
+   RevBlinkinLedDriver.BlinkinPattern pattern;
 
 
 
@@ -73,6 +82,7 @@ public class DriverControl extends LinearOpMode {
         rightServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(CRServo.Direction.FORWARD);
         //clawExtendServo.setDirection(CRServo.Direction.FORWARD);
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
 
         //Declare Mecanum Drive Variables
         double drive;
@@ -108,10 +118,14 @@ public class DriverControl extends LinearOpMode {
                 if(gamepad1.x)
                 {
                     speedState = 1;
+                    pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+                    blinkinLedDriver.setPattern(pattern);
                 }
                 else if(gamepad1.a)
                 {
                     speedState = 0;
+                    pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+                    blinkinLedDriver.setPattern(pattern);
                 }
                 //Intake On/Off
                 if (gamepad1.b){
