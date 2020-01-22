@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 //test
 
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -81,8 +82,8 @@ public class AutonomousCommon {
         rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        double rearPower = power;
-        double frontPower =  power + 0.0;
+        double rearPower = power + 0.0;
+        double frontPower =  power + 0.045;
         switch (strafeDirection) {
             case Left:
                 telemetry.addLine("strafing left");

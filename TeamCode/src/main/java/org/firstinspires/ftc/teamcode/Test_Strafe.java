@@ -7,7 +7,7 @@ public class Test_Strafe extends SkystoneBase {
         this.playSide = AutonomousCommon.PlayfieldSide.Blue;
         initMotors();
         waitForStart();
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,10,0.6,true, telemetry);
+        AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight,AutonomousCommon.StrafeDirection.Right,100,0.6,true, telemetry);
 
     }
 
