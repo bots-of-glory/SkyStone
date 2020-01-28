@@ -158,6 +158,10 @@ public class AutonomousCommon {
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
 
         switch (strafeDirection) {

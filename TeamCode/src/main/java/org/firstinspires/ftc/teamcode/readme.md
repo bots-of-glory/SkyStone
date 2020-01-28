@@ -94,7 +94,7 @@ Selective Team phones can then be programmed by selecting the desired Module fro
 prior to clicking to the green Run arrow.
 
 Warning:  This is not for the inexperienced Software developer.
-You will need to be comfortable with File manipulations and managing Android Studio Modules.
+You will need to be comfortable with File manipulations and managing Android Studio Modules.ssssssssssssssssssssssssssssss'.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
 These changes are performed OUTSIDE of Android Studios, so close Android Studios before you do this.
  
 Also.. Make a full project backup before you start this :)

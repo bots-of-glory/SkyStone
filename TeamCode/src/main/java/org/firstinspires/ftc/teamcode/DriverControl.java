@@ -96,8 +96,8 @@ public class DriverControl extends LinearOpMode {
 
         //Declare Speed Variables(0 = slow)(1 = fast)
         int speedState = 1;
-        double fast = 1.0;
-        double slow = 0.6;
+        double fast = 0.9;
+        double slow = 0.70;
         double intakeOffset = .75;
         float   leftPower, rightPower, xValue, yValue;
         //Declare Direction Variable(s)
@@ -107,8 +107,6 @@ public class DriverControl extends LinearOpMode {
         int flipperState = 0;
         boolean buttonState = false;
         {
-            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, letitdieID);
-
             waitForStart();
             SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, alarmSoundID);
 

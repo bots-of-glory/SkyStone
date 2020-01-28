@@ -90,7 +90,7 @@ public class SkystoneBase extends LinearOpMode {
         //int forwardPosition = AutonomousCommon.convertInchesToPosition(2.0,false);
         double power = 0.6;
         try {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 2, power, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 2, power, opModeIsActive(), telemetry);
             if (playSide == PlayfieldSide.Blue) {
                 macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Right, 13, power, opModeIsActive(), telemetry);
                 macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Backward, 30, power, opModeIsActive(), telemetry);
