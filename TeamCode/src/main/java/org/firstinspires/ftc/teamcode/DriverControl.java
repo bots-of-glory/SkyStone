@@ -25,6 +25,7 @@ public class DriverControl extends LinearOpMode {
     private DcMotor rearLeft;       //2     Hub1 P2
     private DcMotor frontRight;     //3     Hub1 P1
     private DcMotor rearRight;      //4     Hub1 P3
+    private DcMotor clawMotor;
 
     //private DcMotor intake1;
     //private DcMotor intake2;
@@ -52,6 +53,7 @@ public class DriverControl extends LinearOpMode {
         rearLeft = hardwareMap.dcMotor.get("rearLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearRight = hardwareMap.dcMotor.get("rearRight");
+        clawMotor = hardwareMap.dcMotor.get("clawMotor");
 
         //intake1 = hardwareMap.dcMotor.get("intake1");
        // intake2 = hardwareMap.dcMotor.get("intake2");
@@ -70,6 +72,7 @@ public class DriverControl extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        clawServo.setDirection(DcMotor.Direction.FORWARD);
 
         //intake1.setDirection(DcMotor.Direction.REVERSE);
         //intake2.setDirection(DcMotor.Direction.FORWARD);
@@ -175,9 +178,14 @@ public class DriverControl extends LinearOpMode {
 //------------------------------------Gamepad 1 End-------------------------------------------------
 // ------------------------------------Gamepad 2 Start-------------------------------------------------
 
-                lift1.setPower(Range.clip(gamepad2.right_stick_y*0.6,-1.0,1.0));
-                lift2.setPower(Range.clip(gamepad2.right_stick_y*0.6, -1.0, 1.0));
-
+                lift1.setPower(Range.clip(gamepad2.left_stick_y*0.6,-1.0,1.0));
+                lift2.setPower(Range.clip(gamepad2.left_stick_y*0.6, -1.0, 1.0));
+                if (gamepad2.right_bumper) {
+                    clawMotor.setPower(1);
+                }
+                if (gamepad2.left_bumper) {
+                    clawMotor.setPower(-1);
+                }
                 //Flipper up
                 if (gamepad2.dpad_up) {
                     AutonomousCommon.servoMovement(leftServo, 1);
@@ -212,6 +220,7 @@ public class DriverControl extends LinearOpMode {
                     frontRight.setPower(-1);
                 }
             }
+
 //------------------------------------Gamepad 2 End-------------------------------------------------
 
 

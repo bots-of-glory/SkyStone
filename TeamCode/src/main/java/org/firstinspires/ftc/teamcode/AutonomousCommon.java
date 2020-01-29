@@ -250,7 +250,7 @@ public class AutonomousCommon {
         else
         {
             //non strafe factor
-            returnValue = (int) Math.round(inches * (1000/23));
+            returnValue = (int) Math.round(inches * (1000/28));
         }
 
         return returnValue;
