@@ -389,11 +389,14 @@ public class SkystoneVisionBaseBeta extends LinearOpMode {
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
+
+               // todo: Add positions
                 /*if (yPosition > 8 * mmPerInch) {
 
                 }
-                
-                 */
+*/
+
+
                 telemetry.addLine("Stone Found");
                 telemetry.update();
                 //r4targetsSkyStone.deactivate();
