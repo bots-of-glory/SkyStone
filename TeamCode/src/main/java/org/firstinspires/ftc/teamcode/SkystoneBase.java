@@ -299,13 +299,13 @@ public class SkystoneBase extends LinearOpMode {
 
         if (playSide ==PlayfieldSide.Red) {
             //TODO: replace with this with move foraward since we should already be center
-            if(position.direction==VUPoistionDirection.Left){
+            if(position.direction==VUPositionDirection.Left){
                 AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,3,.6,opModeIsActive(),telemetry);
             }
-            if(position.direction==VUPoistionDirection.Right){
+            if(position.direction==VUPositionDirection.Right){
                 AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Right,3,.6,opModeIsActive(),telemetry);
             }
-            if(position.direction==VUPoistionDirection.Center){
+            if(position.direction==VUPositionDirection.Center){
                 AutonomousCommon.macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Forward,3,.6,opModeIsActive(),telemetry);
             }
                 clawServo.setPower(-1.0);
@@ -325,13 +325,13 @@ public class SkystoneBase extends LinearOpMode {
            //telemetry.addLine(moveTo+"");
             //telemetry.update();
             //sleep(5000);
-            if(position.direction==VUPoistionDirection.Left){
+            if(position.direction==VUPositionDirection.Left){
                 macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Left,moveTo,.6,opModeIsActive(),telemetry);
             }
-            if(position.direction==VUPoistionDirection.Right){
+            if(position.direction==VUPositionDirection.Right){
                 macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Right,moveTo,.6,opModeIsActive(),telemetry);
             }
-            if(position.direction==VUPoistionDirection.Center){
+            if(position.direction==VUPositionDirection.Center){
                 //macanumMovementTimeBased(frontLeft,rearLeft,frontRight,rearRight, StrafeDirection.Forward,moveTo,.6,opModeIsActive(),telemetry);
             }
             clawServo.setPower(-1.0);

@@ -5,12 +5,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class AutonomousCommon {
-
 
     public static void macanumBox(DcMotor frontLeft, DcMotor rearLeft,
                                   DcMotor frontRight, DcMotor rearRight,
@@ -152,6 +152,8 @@ public class AutonomousCommon {
                                        int inches, double power, boolean opModeIsActive,
                                        Telemetry telemetry) {
 
+        //TODO: add elasped time somewhere. example below.
+        ElapsedTime runtime = new ElapsedTime();
         telemetry.addLine("Begin macanumMovement");
         telemetry.update();
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -162,6 +164,11 @@ public class AutonomousCommon {
         rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.getCurrentPosition();
+        frontLeft.getCurrentPosition();
+        rearRight.getCurrentPosition();
+        frontRight.getCurrentPosition();
+
         int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
 
         switch (strafeDirection) {
@@ -199,7 +206,11 @@ public class AutonomousCommon {
                 break;
         }
 
+        if (strafeDirection == StrafeDirection.Left || strafeDirection == StrafeDirection.Right) {
+            int timeout
+        } else {
 
+        }
         rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -209,7 +220,9 @@ public class AutonomousCommon {
         rearRight.setPower(power);
         frontLeft.setPower(power);
         frontRight.setPower(power);
-        while (rearLeft.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
+        runtime.reset();
+
+        while (opModeIsActive && (runtime.seconds() < timeout) && rearLeft.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
         }
 //        while (rearLeft.isBusy() && opModeIsActive) {
 //        }
@@ -239,7 +252,6 @@ public class AutonomousCommon {
             Thread.currentThread().interrupt();
         }
     }
-
     public static int convertInchesToPosition(double inches, boolean isStrafe) {
         int returnValue = 0;
 
@@ -269,10 +281,10 @@ public class AutonomousCommon {
     public static class VUPosition {
         public double x;
         public double z;
-        public VUPoistionDirection direction;
+        public VUPositionDirection direction;
 
     }
-    public enum VUPoistionDirection{
+    public enum VUPositionDirection {
         Left, Center, Right
     }
     public enum RotateDegree {

@@ -19,6 +19,10 @@ public class Test_Straight extends SkystoneBase {
         rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.getCurrentPosition();
+        rearRight.getCurrentPosition();
+        frontLeft.getCurrentPosition();
+        frontRight.setTargetPosition(-1000);
         rearLeft.setTargetPosition(-1000);
         rearRight.setTargetPosition(1000);
         frontLeft.setTargetPosition(1000);
