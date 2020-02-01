@@ -169,7 +169,6 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
                                             robot.rightDrive.getCurrentPosition());
                 telemetry.update();
             }
-            encoderDrive(1,52,52,1000,);
 
             // Stop all motion;
             robot.leftDrive.setPower(0);

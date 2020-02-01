@@ -58,12 +58,10 @@ public class SkystoneVisionBase extends SkystoneBase {
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
-    private VuforiaLocalizer vuforiaPhone = null;
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
-    WebcamName testCam = null;
 
     private boolean targetVisible = false;
     private float phoneXRotate    = 0;
@@ -79,26 +77,12 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        //CameraDevice.Instance.SetFlashTorchMode( true / false );
-
-
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection   = CAMERA_CHOICE;
-        parameters.cameraName = testCam;
-        /**
-         * We also indicate which camera on the RC we wish to use.
-         */
-        //parameters.cameraName = testCam;
 
-        //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        //CameraDevice.getInstance().setFlashTorchMode(true);
-
-        VuforiaLocalizer.Parameters phoneParameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        phoneParameters.vuforiaLicenseKey = VUFORIA_KEY;
-        phoneParameters.cameraDirection   = CAMERA_CHOICE;
-        vuforiaPhone = ClassFactory.getInstance().createVuforia(phoneParameters);
         CameraDevice.getInstance().setFlashTorchMode(true);
+        //vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
@@ -238,9 +222,9 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT =     6.0f * mmPerInch;     // eg: Camera is ON the robot's center line
+        final float CAMERA_FORWARD_DISPLACEMENT =  5.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 10.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT = -6.0f * mmPerInch;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -294,45 +278,37 @@ public class SkystoneVisionBase extends SkystoneBase {
                 VectorF translation = lastLocation.getTranslation();
                 double xPosition = translation.get(0)/ mmPerInch;
                 double zPosition = translation.get(2)/ mmPerInch;
+                double yPosition = translation.get(1) / mmPerInch;
                 int factor=3;
                 if (xPosition > 16.3+factor) {
                     pos.direction = Left;
-                    //AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Left, moveTo, 0.6, opModeIsActive(), telemetry);
 
-                    //rearLeft.setPower(rearPower);
-                    //rearRight.setPower(-rearPower);
-                    //frontLeft.setPower(-frontPower);
-                   // frontRight.setPower(frontPower);
                 } else if (xPosition < 16.3+factor && xPosition > -16.5+factor) {
 
-                    //rearLeft.setPower(0);
-                    ///rearRight.setPower(0);
-                    //frontLeft.setPower(0);
-                    //frontRight.setPower(0);
+
                     pos.direction = Center;
                 } else if (xPosition < -16.5+factor) {
-                    //rearLeft.setPower(-rearPower);
-                   // rearRight.setPower(rearPower);
-                    //frontLeft.setPower(frontPower);
-                    //frontRight.setPower(-frontPower);
+
                     pos.direction = Right;
-                    //AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, moveTo, 0.6, opModeIsActive(), telemetry);
 
                 }
 
                 pos.x = xPosition;
-                pos.z =zPosition;
+                pos.z = zPosition;
+                pos.y = yPosition;
 
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                //telemetry.update();
                 moveToPosition = true;
             }
             else {
                 telemetry.addData("Visible Target", "none");
+                telemetry.update();
 
             }
 
@@ -344,8 +320,9 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         telemetry.addLine("direction: " + pos.direction);
         telemetry.addLine("x: " + pos.x);
+        telemetry.addLine("y: " +pos.y);
         telemetry.addLine("z: " +pos.z);
-        telemetry.addLine("z: " +pos.z);
+        telemetry.update();
         Thread.sleep(10000);
         targetsSkyStone.deactivate();
         return pos;

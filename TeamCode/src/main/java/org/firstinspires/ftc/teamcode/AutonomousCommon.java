@@ -169,6 +169,7 @@ public class AutonomousCommon {
         rearRight.getCurrentPosition();
         frontRight.getCurrentPosition();
 
+        int timeout;
         int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
 
         switch (strafeDirection) {
@@ -206,11 +207,9 @@ public class AutonomousCommon {
                 break;
         }
 
-        if (strafeDirection == StrafeDirection.Left || strafeDirection == StrafeDirection.Right) {
-            int timeout
-        } else {
+        timeout = targetPosition * (2/1000) + 3;
 
-        }
+
         rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -222,7 +221,7 @@ public class AutonomousCommon {
         frontRight.setPower(power);
         runtime.reset();
 
-        while (opModeIsActive && (runtime.seconds() < timeout) && rearLeft.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
+        while ((runtime.seconds() < timeout) && rearRight.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
         }
 //        while (rearLeft.isBusy() && opModeIsActive) {
 //        }
@@ -257,12 +256,12 @@ public class AutonomousCommon {
 
         if(isStrafe){
             //strafe factor
-            returnValue = (int) Math.round(inches * (1000/17));
+            returnValue = (int) Math.round(inches * (1000/13));
         }
         else
         {
             //non strafe factor
-            returnValue = (int) Math.round(inches * (1000/28));
+            returnValue = (int) Math.round(inches * (1000/26));
         }
 
         return returnValue;
@@ -281,6 +280,7 @@ public class AutonomousCommon {
     public static class VUPosition {
         public double x;
         public double z;
+        public double y;
         public VUPositionDirection direction;
 
     }

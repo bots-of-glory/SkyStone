@@ -247,10 +247,10 @@ public class SkystoneBase extends LinearOpMode {
     public void moveToScanPosition() throws InterruptedException {
         telemetry.addLine("Begin moveToLegos");
         if (playSide==PlayfieldSide.Red) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 23, 0.6, opModeIsActive(), telemetry);
         }
         if (playSide==PlayfieldSide.Blue) {
-            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovement(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 23, 0.6, opModeIsActive(), telemetry);
 
 
         }
@@ -263,7 +263,7 @@ public class SkystoneBase extends LinearOpMode {
 
         }
         if (playSide==PlayfieldSide.Blue) {
-            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 15, 0.6, opModeIsActive(), telemetry);
 
 
         }

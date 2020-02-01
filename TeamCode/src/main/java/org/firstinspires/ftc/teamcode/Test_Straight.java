@@ -9,40 +9,7 @@ public class Test_Straight extends SkystoneBase {
         this.playSide = AutonomousCommon.PlayfieldSide.Blue;
         initMotors();
         waitForStart();
-        //int calibrationTest = (AutonomousCommon.convertInchesToPosition(10, false));
-        //int strafeTest = (AutonomousCommon.convertInchesToPosition(10,true));
-        rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearLeft.getCurrentPosition();
-        rearRight.getCurrentPosition();
-        frontLeft.getCurrentPosition();
-        frontRight.setTargetPosition(-1000);
-        rearLeft.setTargetPosition(-1000);
-        rearRight.setTargetPosition(1000);
-        frontLeft.setTargetPosition(1000);
-        frontRight.setTargetPosition(-1000);
-        rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rearLeft.setPower(1);
-        rearRight.setPower(1);
-        frontLeft.setPower(1);
-        frontRight.setPower(1);
-        while (rearLeft.isBusy()) {
-        }
-        while (rearRight.isBusy()) {
-        }
-        while (frontLeft.isBusy()) {
-        }
-        while (frontRight.isBusy()) {
-        }
+   AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,10,0.6,opModeIsActive(),telemetry);
 //        int target = 1000;
 //        int startPosition = frontLeft.getCurrentPosition();
 //        frontLeft.setPower(.6);
