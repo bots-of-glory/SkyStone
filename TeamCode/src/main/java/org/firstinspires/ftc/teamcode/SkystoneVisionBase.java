@@ -262,67 +262,64 @@ public class SkystoneVisionBase extends SkystoneBase {
             long end = t+timeout;
             while (System.currentTimeMillis() < end && !moveToPosition) {
 
-                while (!moveToPosition) {
+                // check all the trackable targets to see which one (if any) is visible.
+                for (VuforiaTrackable trackable : allTrackables) {
+                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                        telemetry.addData("Visible Target", trackable.getName());
 
-                    // check all the trackable targets to see which one (if any) is visible.
-                    for (VuforiaTrackable trackable : allTrackables) {
-                        if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                            telemetry.addData("Visible Target", trackable.getName());
+                        targetVisible = true;
 
-                            targetVisible = true;
-
-                            // getUpdatedRobotLocation() will return null if no new information is available since
-                            // the last time that call was made, or if the trackable is not currently visible.
-                            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                            if (robotLocationTransform != null) {
-                                lastLocation = robotLocationTransform;
-                            }
-                            break;
+                        // getUpdatedRobotLocation() will return null if no new information is available since
+                        // the last time that call was made, or if the trackable is not currently visible.
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
                         }
+                        break;
                     }
+                }
 
-                    // Provide feedback as to where the robot is located (if we know).
-                    if (targetVisible) {
-                        // express position (translation) of robot in inches.
-                        VectorF translation = lastLocation.getTranslation();
-                        double xPosition = translation.get(0) / mmPerInch;
-                        double zPosition = translation.get(2) / mmPerInch;
-                        double yPosition = translation.get(1) / mmPerInch;
-                        int factor = 3;
-                        if (xPosition > 16.3 + factor) {
-                            pos.direction = Left;
+                // Provide feedback as to where the robot is located (if we know).
+                if (targetVisible) {
+                    // express position (translation) of robot in inches.
+                    VectorF translation = lastLocation.getTranslation();
+                    double xPosition = translation.get(0) / mmPerInch;
+                    double zPosition = translation.get(2) / mmPerInch;
+                    double yPosition = translation.get(1) / mmPerInch;
+                    int factor = 3;
+                    if (xPosition > 16.3 + factor) {
+                        pos.direction = Left;
 
-                        } else if (xPosition < 16.3 + factor && xPosition > -16.5 + factor) {
+                    } else if (xPosition < 16.3 + factor && xPosition > -16.5 + factor) {
 
 
-                            pos.direction = Center;
-                        } else if (xPosition < -16.5 + factor) {
+                        pos.direction = Center;
+                    } else if (xPosition < -16.5 + factor) {
 
-                            pos.direction = Right;
-
-                        }
-
-                        pos.x = xPosition;
-                        pos.z = zPosition;
-                        pos.y = yPosition;
-
-                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-                        // express the rotation of the robot in degrees.
-                        Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                        //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                        //telemetry.update();
-                        moveToPosition = true;
-                    } else {
-                        telemetry.addData("Visible Target", "none");
-                        telemetry.update();
+                        pos.direction = Right;
 
                     }
 
+                    pos.x = xPosition;
+                    pos.z = zPosition;
+                    pos.y = yPosition;
+
+                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                    // express the rotation of the robot in degrees.
+                    Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                    //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                    //telemetry.update();
+                    moveToPosition = true;
+                } else {
+                    telemetry.addData("Visible Target", "none");
                     telemetry.update();
 
                 }
+
+                telemetry.update();
+
             }
             if(moveToPosition){
                 break;
