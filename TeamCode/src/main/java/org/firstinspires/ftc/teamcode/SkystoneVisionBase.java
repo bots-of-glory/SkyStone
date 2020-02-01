@@ -58,7 +58,7 @@ public class SkystoneVisionBase extends SkystoneBase {
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
-
+    private VuforiaLocalizer vuforiaPhone = null;
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
@@ -84,6 +84,7 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.cameraName = testCam;
         /**
          * We also indicate which camera on the RC we wish to use.
          */
@@ -91,7 +92,14 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        //CameraDevice.getInstance().setFlashTorchMode(true);
+
+        VuforiaLocalizer.Parameters phoneParameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        phoneParameters.vuforiaLicenseKey = VUFORIA_KEY;
+        phoneParameters.cameraDirection   = CAMERA_CHOICE;
+        vuforiaPhone = ClassFactory.getInstance().createVuforia(phoneParameters);
         CameraDevice.getInstance().setFlashTorchMode(true);
+
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
         VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
