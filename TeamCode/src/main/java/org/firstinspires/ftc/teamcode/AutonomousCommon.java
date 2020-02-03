@@ -74,16 +74,17 @@ public class AutonomousCommon {
 
         telemetry.addLine("Begin macanumMovement");
         telemetry.update();
-        //rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         double rearPower = power + 0.0;
-        double frontPower =  power + 0.045;
+        //double frontPower =  power + 0.045;
+        double frontPower =  power;
         switch (strafeDirection) {
             case Left:
                 telemetry.addLine("strafing left");
@@ -153,21 +154,13 @@ public class AutonomousCommon {
                                        Telemetry telemetry) {
 
         //TODO: add elasped time somewhere. example below.
-        ElapsedTime runtime = new ElapsedTime();
         telemetry.addLine("Begin macanumMovement");
         telemetry.update();
         rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearLeft.getCurrentPosition();
-        frontLeft.getCurrentPosition();
-        rearRight.getCurrentPosition();
-        frontRight.getCurrentPosition();
+        //double speed = .045;
 
         int timeout;
         int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
@@ -180,6 +173,10 @@ public class AutonomousCommon {
                 rearRight.setTargetPosition(-targetPosition);
                 frontLeft.setTargetPosition(-targetPosition);
                 frontRight.setTargetPosition(targetPosition);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
                 break;
             case Right:
                 telemetry.addLine("strafing right");
@@ -188,6 +185,10 @@ public class AutonomousCommon {
                 rearRight.setTargetPosition(targetPosition);
                 frontLeft.setTargetPosition(targetPosition);
                 frontRight.setTargetPosition(-targetPosition);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
                 break;
             case Forward:
                 telemetry.addLine("moving forward");
@@ -196,6 +197,14 @@ public class AutonomousCommon {
                 rearRight.setTargetPosition(targetPosition);
                 frontLeft.setTargetPosition(targetPosition);
                 frontRight.setTargetPosition(targetPosition);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
                 break;
             case Backward:
                 telemetry.addLine("moving backward");
@@ -204,24 +213,27 @@ public class AutonomousCommon {
                 rearRight.setTargetPosition(-targetPosition);
                 frontLeft.setTargetPosition(-targetPosition);
                 frontRight.setTargetPosition(-targetPosition);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
                 break;
         }
 
-        timeout = targetPosition * (2/1000) + 3;
+       // timeout = Math.round(targetPosition * (2/1000) + 2);
 
 
         rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         rearLeft.setPower(power);
         rearRight.setPower(power);
         frontLeft.setPower(power);
         frontRight.setPower(power);
-        runtime.reset();
-
-        while ((runtime.seconds() < timeout) && rearRight.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
+       // runtime.reset();
+        //(runtime.seconds() < timeout) &&
+        while (rearRight.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
         }
 //        while (rearLeft.isBusy() && opModeIsActive) {
 //        }

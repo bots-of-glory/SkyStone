@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
 
@@ -39,6 +40,8 @@ public class SkystoneBase extends LinearOpMode {
         leftServo = hardwareMap.servo.get("leftServo");
         rightServo = hardwareMap.servo.get("rightServo");
         clawServo = hardwareMap.crservo.get("clawservo");
+        ElapsedTime runtime = new ElapsedTime();
+
 
         //declare motor directions
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -51,6 +54,15 @@ public class SkystoneBase extends LinearOpMode {
         leftServo.setDirection(Servo.Direction.FORWARD);
         rightServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(CRServo.Direction.FORWARD);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         //mrGyro = (ModernRoboticsI2cGyro) sensorGyro;
         telemetry.addLine("End moveToPlatform " + playSide.toString());
@@ -259,11 +271,11 @@ public class SkystoneBase extends LinearOpMode {
     public void moveToScanPositionTimeBased() throws InterruptedException {
         telemetry.addLine("Begin moveToLegos");
         if (playSide==PlayfieldSide.Red) {
-            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 13, 0.6, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 23, 0.6, opModeIsActive(), telemetry);
 
         }
         if (playSide==PlayfieldSide.Blue) {
-            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 15, 0.6, opModeIsActive(), telemetry);
+            macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, StrafeDirection.Forward, 23, 0.6, opModeIsActive(), telemetry);
 
 
         }

@@ -25,6 +25,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Center;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Left;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Right;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.CameraDevice;
 import com.vuforia.TargetFinder;
 
@@ -35,7 +37,7 @@ public class SkystoneVisionBase extends SkystoneBase {
     MasterVision vision;
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false  ;
+    private static final boolean PHONE_IS_PORTRAIT = true   ;
     private static final String VUFORIA_KEY =
             "AZLRyGv/////AAABmUBYMKfdK0Aomzp0Nt6VEkguSViSeAoA+D5usIvm/kqre4G73/hhstqirGs3OdwbEScv9C37DcPjYjTLiH/InhJiNOZ2sCHrUQ/pjXVvB+yUgmXFKdyUsiZNDNJgnyc7CnBFQ6FyrVRsLEv7vg17WNPdh7mgumtlb2LwD0N0m1D9ntZg90cLxto9GTfr+V6xS0k/NEsBPuljDPx2Hql3GAD39HZ3Ls62r306oUm9g+UVFNNUdKuvGc3xxtrTQAZHSzjufW7N232cZTPWyE508Bh8sKWUCJMB7ZuQ7TPZqS+VWPMdxUo9N//J5iHFoDidnjHb5Z6d2qKmqDk3/rIa5pdzc5bY+fhkr27+SegoN7WK";
     private static final float mmPerInch        = 25.4f;
@@ -249,19 +251,19 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         targetsSkyStone.activate();
         targetVisible = false;
+
         //TODO: Add strafe slow
         boolean moveToPosition = false;
 
-        long timeout = 5000;
+        long timeout = 2500;
 
         int retries = 5;
-        double power=.6;
-
-        for(int x = 1;x<=retries;x++) {
+        double power= 0.5;
+       for(int x = 1; x<=retries ;x++) {
             long t= System.currentTimeMillis();
             long end = t+timeout;
-            while (System.currentTimeMillis() < end && !moveToPosition) {
-
+           initMotors();
+           swhile (System.currentTimeMillis() < end && !moveToPosition) {
                 // check all the trackable targets to see which one (if any) is visible.
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -320,23 +322,24 @@ public class SkystoneVisionBase extends SkystoneBase {
 
                 telemetry.update();
 
-            }
-            if(moveToPosition){
+            } if (moveToPosition) {
                 break;
             }
             else {
-                AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
+
+                AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
             }
         }
 
         // Disable Tracking when we are done;
-
+        AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
+        AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Forward, 16, power, opModeIsActive(),telemetry);
         telemetry.addLine("direction: " + pos.direction);
         telemetry.addLine("x: " + pos.x);
         telemetry.addLine("y: " +pos.y);
         telemetry.addLine("z: " +pos.z);
         telemetry.update();
-        Thread.sleep(10000);
+        Thread.sleep(1000);
         targetsSkyStone.deactivate();
         return pos;
 

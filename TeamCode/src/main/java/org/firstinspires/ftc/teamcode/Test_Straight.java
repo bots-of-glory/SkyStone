@@ -9,7 +9,9 @@ public class Test_Straight extends SkystoneBase {
         this.playSide = AutonomousCommon.PlayfieldSide.Blue;
         initMotors();
         waitForStart();
-   AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,10,0.6,opModeIsActive(),telemetry);
+       AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Right,15,0.5,opModeIsActive(),telemetry);
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Left,15,0.5,opModeIsActive(),telemetry);
+
 //        int target = 1000;
 //        int startPosition = frontLeft.getCurrentPosition();
 //        frontLeft.setPower(.6);
