@@ -13,7 +13,6 @@ public class LoadingZoneBlue extends SkystoneVisionBase{
     public void runOpMode() throws InterruptedException {
         this.playSide = PlayfieldSide.Blue;
         AutonomousCommon.VUPosition position;
-
         initMotors();
         waitForStart();
         moveToScanPosition();

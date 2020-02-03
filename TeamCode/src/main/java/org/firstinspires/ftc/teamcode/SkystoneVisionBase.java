@@ -251,20 +251,20 @@ public class SkystoneVisionBase extends SkystoneBase {
 
         targetsSkyStone.activate();
         targetVisible = false;
-
+        initMotors();
         //TODO: Add strafe slow
         boolean moveToPosition = false;
 
-        long timeout = 2500;
+        long timeout = 1000;
 
         int retries = 5;
         double power= 0.5;
        for(int x = 1; x<=retries ;x++) {
             long t= System.currentTimeMillis();
             long end = t+timeout;
-           initMotors();
-           swhile (System.currentTimeMillis() < end && !moveToPosition) {
-                // check all the trackable targets to see which one (if any) is visible.
+           while (System.currentTimeMillis() < end && !moveToPosition) {
+
+               // check all the trackable targets to see which one (if any) is visible.
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
@@ -288,8 +288,8 @@ public class SkystoneVisionBase extends SkystoneBase {
                     double xPosition = translation.get(0) / mmPerInch;
                     double zPosition = translation.get(2) / mmPerInch;
                     double yPosition = translation.get(1) / mmPerInch;
-                    int factor = 3;
-                    if (xPosition > 16.3 + factor) {
+                    //int factor = 3;
+                    /*if (xPosition > 16.3 + factor) {
                         pos.direction = Left;
 
                     } else if (xPosition < 16.3 + factor && xPosition > -16.5 + factor) {
@@ -300,11 +300,11 @@ public class SkystoneVisionBase extends SkystoneBase {
 
                         pos.direction = Right;
 
-                    }
+                    }*/
 
-                    pos.x = xPosition;
-                    pos.z = zPosition;
-                    pos.y = yPosition;
+                    pos.x = Math.round(xPosition);
+                    pos.z = Math.round(zPosition);
+                    pos.y = Math.round(yPosition);
 
                     telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                             translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
@@ -314,7 +314,8 @@ public class SkystoneVisionBase extends SkystoneBase {
                     //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                     //telemetry.update();
                     moveToPosition = true;
-                } else {
+                }
+                else {
                     telemetry.addData("Visible Target", "none");
                     telemetry.update();
 
@@ -327,13 +328,17 @@ public class SkystoneVisionBase extends SkystoneBase {
             }
             else {
 
-                AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
             }
         }
 
         // Disable Tracking when we are done;
-        AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
-        AutonomousCommon.macanumMovementTimeBased(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Forward, 16, power, opModeIsActive(),telemetry);
+        AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 4, power, opModeIsActive(),telemetry);
+        AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Forward, 15, power, opModeIsActive(),telemetry);
+        clawServo.setPower(-1.0);
+        Thread.sleep(2500);
+        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
+        AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry, AutonomousCommon.RotateDegree.Negative);
         telemetry.addLine("direction: " + pos.direction);
         telemetry.addLine("x: " + pos.x);
         telemetry.addLine("y: " +pos.y);

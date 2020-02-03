@@ -21,7 +21,7 @@ public class SkystoneBase extends LinearOpMode {
     Servo leftServo;
     Servo rightServo;
     public PlayfieldSide playSide;
-    private CRServo clawServo;
+    public CRServo clawServo;
 
 
     @Override
