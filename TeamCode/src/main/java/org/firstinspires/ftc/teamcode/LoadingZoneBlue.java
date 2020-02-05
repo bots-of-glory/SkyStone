@@ -17,9 +17,8 @@ public class LoadingZoneBlue extends SkystoneVisionBase{
         waitForStart();
         moveToScanPosition();
         locateSkystone();
-        //moveToLegosFromScanPositionTimeBased();
-        //grabLegoTimeBased(position);
-       // moveToBuildingZoneTimeBased();
-       // dropLego();
+        moveToLegosFromScanPosition();
+        grabLego();
+        moveToBuildingZone();
     }
 }

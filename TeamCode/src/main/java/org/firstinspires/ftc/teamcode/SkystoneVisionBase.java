@@ -237,28 +237,16 @@ public class SkystoneVisionBase extends SkystoneBase {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        // WARNING:
-        // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
-        // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
-        // CONSEQUENTLY do not put any driving commands in this loop.
-        // To restore the normal opmode structure, just un-comment the following line:
-
-        // waitForStart();
-
-        // Note: To use the remote camera preview:
-        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
-        // Tap the preview window to receive a fresh image.
-
         targetsSkyStone.activate();
         targetVisible = false;
         initMotors();
         //TODO: Add strafe slow
         boolean moveToPosition = false;
 
-        long timeout = 1000;
+        long timeout = 500;
 
         int retries = 5;
-        double power= 0.5;
+        double power= 0.6;
        for(int x = 1; x<=retries ;x++) {
             long t= System.currentTimeMillis();
             long end = t+timeout;
@@ -329,22 +317,14 @@ public class SkystoneVisionBase extends SkystoneBase {
             else {
 
                 AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
+                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,5,power,opModeIsActive(),telemetry);
             }
         }
-
-        // Disable Tracking when we are done;
-        AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 4, power, opModeIsActive(),telemetry);
-        AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Forward, 15, power, opModeIsActive(),telemetry);
-        clawServo.setPower(-1.0);
-        Thread.sleep(2500);
-        AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,15,0.6,opModeIsActive(),telemetry);
-        AutonomousCommon.macanumRotate(frontLeft,rearLeft,frontRight,rearRight,90,opModeIsActive(),telemetry, AutonomousCommon.RotateDegree.Negative);
         telemetry.addLine("direction: " + pos.direction);
         telemetry.addLine("x: " + pos.x);
         telemetry.addLine("y: " +pos.y);
         telemetry.addLine("z: " +pos.z);
         telemetry.update();
-        Thread.sleep(1000);
         targetsSkyStone.deactivate();
         return pos;
 
