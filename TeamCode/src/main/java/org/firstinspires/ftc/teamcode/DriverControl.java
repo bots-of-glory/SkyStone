@@ -180,20 +180,25 @@ public class DriverControl extends LinearOpMode {
 
                 lift1.setPower(Range.clip(gamepad2.left_stick_y*0.6,-1.0,1.0));
                 lift2.setPower(Range.clip(gamepad2.left_stick_y*0.6, -1.0, 1.0));
-                if (gamepad2.right_bumper) {
+                lift1.getCurrentPosition();
+                lift2.getCurrentPosition();
+                int liftPosition = (lift1.getCurrentPosition() + lift2.getCurrentPosition()) / 2;
+                telemetry.addData("Lift Position: ", liftPosition);
+
+               /* if (gamepad2.right_bumper) {
                     clawMotor.setPower(1);
                 }
                 if (gamepad2.left_bumper) {
                     clawMotor.setPower(-1);
-                }
+                }*/
                 //Flipper up
-                if (gamepad2.dpad_up) {
+                if (gamepad2.right_bumper) {
                     AutonomousCommon.servoMovement(leftServo, 1);
                     AutonomousCommon.servoMovement(rightServo, 0);
                 //Flipper down
                 }
 
-                if (gamepad2.dpad_down) {
+                if (gamepad2.left_bumper) {
                     AutonomousCommon.servoMovement(leftServo, 0);
                     AutonomousCommon.servoMovement(rightServo, 1);
                 }

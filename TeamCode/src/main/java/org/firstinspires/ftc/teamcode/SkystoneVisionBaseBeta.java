@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.teamcode.vision.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Boolean.TRUE;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
@@ -26,7 +24,6 @@ import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirectio
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Left;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Right;
 import com.vuforia.CameraDevice;
-import com.vuforia.TargetFinder;
 
 /**
  * Base Class for Skystone operations that require vision (Vuforia)
@@ -313,8 +310,8 @@ public class SkystoneVisionBaseBeta extends SkystoneBase {
 
                 }
 
-                pos.x = xPosition;
-                pos.z =zPosition;
+                pos.setX(xPosition);
+                pos.setZ(zPosition);
 
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
@@ -336,9 +333,9 @@ public class SkystoneVisionBaseBeta extends SkystoneBase {
         // Disable Tracking when we are done;
 
         telemetry.addLine("direction: " + pos.direction);
-        telemetry.addLine("x: " + pos.x);
-        telemetry.addLine("z: " +pos.z);
-        telemetry.addLine("z: " +pos.z);
+        telemetry.addLine("x: " + pos.getX());
+        telemetry.addLine("z: " + pos.getZ());
+        telemetry.addLine("z: " + pos.getZ());
         Thread.sleep(10000);
         targetsSkyStone.deactivate();
         return pos;

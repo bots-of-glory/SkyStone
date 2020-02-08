@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.vision;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -13,6 +14,7 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 @Autonomous (name="VuTest", group="Competition Autonomous")
+
 public class VisionJavaExample extends LinearOpMode{
     MasterVision vision;
     SampleRandomizedPositions goldPosition;
@@ -185,4 +187,4 @@ public class VisionJavaExample extends LinearOpMode{
             }
             liftMotor.setPower(0);
             liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }}}
+        }}}*/

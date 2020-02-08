@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -16,19 +14,13 @@ import org.firstinspires.ftc.teamcode.vision.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Boolean.TRUE;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Center;
-import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Left;
-import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection.Right;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.vuforia.CameraDevice;
-import com.vuforia.TargetFinder;
 
 /**
  * Base Class for Skystone operations that require vision (Vuforia)
@@ -246,7 +238,7 @@ public class SkystoneVisionBase extends SkystoneBase {
         long timeout = 500;
 
         int retries = 5;
-        double power= 0.6;
+        double power= .5;
        for(int x = 1; x<=retries ;x++) {
             long t= System.currentTimeMillis();
             long end = t+timeout;
@@ -290,9 +282,10 @@ public class SkystoneVisionBase extends SkystoneBase {
 
                     }*/
 
-                    pos.x = Math.round(xPosition);
-                    pos.z = Math.round(zPosition);
-                    pos.y = Math.round(yPosition);
+                    pos.setX(Math.round(xPosition));
+                    pos.setZ(Math.round(zPosition));
+                    pos.setY(Math.round(yPosition));
+                    pos.setOffset(((x-1)*8));
 
                     telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                             translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
@@ -315,15 +308,20 @@ public class SkystoneVisionBase extends SkystoneBase {
                 break;
             }
             else {
-
-                AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
-                AutonomousCommon.macanumMovement(frontLeft,rearLeft,frontRight,rearRight, AutonomousCommon.StrafeDirection.Backward,5,power,opModeIsActive(),telemetry);
+                if (playSide == AutonomousCommon.PlayfieldSide.Blue) {
+                    AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Right, 8, power, opModeIsActive(),telemetry);
+                    AutonomousCommon.macanumAdjust(frontLeft,rearLeft, AutonomousCommon.StrafeDirection.Forward,1*x,1,opModeIsActive(),telemetry);
+                }
+                if (playSide == AutonomousCommon.PlayfieldSide.Red) {
+                    AutonomousCommon.macanumMovement(frontLeft, rearLeft, frontRight, rearRight, AutonomousCommon.StrafeDirection.Left, 8, power, opModeIsActive(),telemetry);
+                    AutonomousCommon.macanumAdjust(frontRight,rearRight, AutonomousCommon.StrafeDirection.Forward,1*x,1,opModeIsActive(),telemetry);
+                }
             }
-        }
+       }
         telemetry.addLine("direction: " + pos.direction);
-        telemetry.addLine("x: " + pos.x);
-        telemetry.addLine("y: " +pos.y);
-        telemetry.addLine("z: " +pos.z);
+        telemetry.addLine("x: " + pos.getX());
+        telemetry.addLine("y: " + pos.getY());
+        telemetry.addLine("z: " + pos.getZ());
         telemetry.update();
         targetsSkyStone.deactivate();
         return pos;

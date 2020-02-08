@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
 
 
-@Autonomous (name="LoadingZoneBlue", group="Competition Autonomous")
-public class LoadingZoneBlue extends SkystoneVisionBase{
+@Autonomous (name="LoadingZoneBlueWithoutPlacement", group="Competition Autonomous")
+public class LoadingZoneBlueWithoutPlacement extends SkystoneVisionBase{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,7 +19,7 @@ public class LoadingZoneBlue extends SkystoneVisionBase{
         moveToLegosFromScanPosition(position);
         grabLego();
         moveToBuildingZone(position);
-        dropLego();
-        parkUnderSkybridge();
+        dropLegoWithoutPlacement();
+        parkUnderSkybridgeWithoutPlacement();
     }
 }

@@ -224,13 +224,12 @@ public class AutonomousCommon {
         }
 
         // correction and timeout
-        int timeout;
+        double timeout;
         int correction = targetPosition / 8;
-        timeout = targetPosition * (2/1000) + 1;
-        if (targetPosition > 20000) {
-            timeout = targetPosition * (2/1000) + 3;
+        if (targetPosition > 5000) {
+            timeout = targetPosition * (2/1000) + 2.5;
         } else {
-            timeout = targetPosition * (2/1000) + 1;
+            timeout = targetPosition * (2/1000) + 1.5;
         }
         int correctionTimeout = correction * (2/1000) + 1;
 
@@ -249,39 +248,39 @@ public class AutonomousCommon {
 //        }
 //        while (frontRight.isBusy() && opModeIsActive) {
 //        }
-
+/*
        if (strafeDirection == StrafeDirection.Right) {
-            if (targetPosition - rearLeft.getCurrentPosition() > correction) {
+            if ((targetPosition - rearLeft.getCurrentPosition()) > correction) {
                 rearLeft.setTargetPosition(correction);
                 rearLeft.setPower(power);
             }
-            if (targetPosition - rearRight.getCurrentPosition() > correction) {
+            if ((targetPosition - rearRight.getCurrentPosition()) > correction) {
                 rearRight.setTargetPosition(correction);
                 rearRight.setPower(power);
             }
-            if (targetPosition - frontLeft.getCurrentPosition() > correction) {
+            if ((targetPosition - frontLeft.getCurrentPosition()) > correction) {
                 frontLeft.setTargetPosition(correction);
                 frontLeft.setPower(power);
             }
-            if (targetPosition - frontRight.getCurrentPosition() > correction) {
+            if ((targetPosition - frontRight.getCurrentPosition()) > correction) {
                 frontRight.setTargetPosition(correction);
                 frontRight.setPower(power);
             }
         }
         else if (strafeDirection == StrafeDirection.Left){
-            if (targetPosition - rearLeft.getCurrentPosition() > correction) {
+            if ((targetPosition - rearLeft.getCurrentPosition()) > correction) {
                 rearLeft.setTargetPosition(correction);
                 rearLeft.setPower(power);
             }
-            if (targetPosition - rearRight.getCurrentPosition() > correction) {
-                rearRight.setTargetPosition(-correction);
+            if ((targetPosition - rearRight.getCurrentPosition()) > correction) {
+                rearRight.setTargetPosition(correction);
                 rearRight.setPower(power);
             }
-            if (targetPosition - frontLeft.getCurrentPosition() > correction) {
-                frontLeft.setTargetPosition(-correction);
+            if ((targetPosition - frontLeft.getCurrentPosition()) > correction) {
+                frontLeft.setTargetPosition(correction);
                 frontLeft.setPower(power);
             }
-            if (targetPosition - frontRight.getCurrentPosition() > correction) {
+            if ((targetPosition - frontRight.getCurrentPosition()) > correction) {
                 frontRight.setTargetPosition(correction);
                 frontRight.setPower(power);
             }
@@ -311,10 +310,130 @@ public class AutonomousCommon {
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while ((runtime.seconds() < correctionTimeout) && rearRight.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
         }
+*/
+
         rearLeft.setPower(0);
         rearRight.setPower(0);
         frontLeft.setPower(0);
         frontRight.setPower(0);
+        telemetry.addLine("End macanumMovement");
+        telemetry.update();
+    }
+    public static void macanumMovementWithLift(DcMotor frontLeft, DcMotor rearLeft,
+                                       DcMotor frontRight, DcMotor rearRight, DcMotor lift1, DcMotor lift2,
+                                       StrafeDirection strafeDirection,
+                                       int inches, int liftEncoderTicks, double power, boolean opModeIsActive,
+                                       Telemetry telemetry) {
+
+        ElapsedTime runtime = new ElapsedTime();
+        telemetry.addLine("Begin macanumMovement");
+        telemetry.update();
+        rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
+        switch (strafeDirection) {
+            case Forward:
+                telemetry.addLine("moving forward");
+                telemetry.update();
+                rearLeft.setTargetPosition(targetPosition);
+                rearRight.setTargetPosition(targetPosition);
+                frontLeft.setTargetPosition(targetPosition);
+                frontRight.setTargetPosition(targetPosition);
+                lift1.setTargetPosition(liftEncoderTicks);
+                lift2.setTargetPosition(liftEncoderTicks);
+                rearLeft.setPower(power);
+                rearRight.setPower(power);
+                frontLeft.setPower(power);
+                frontRight.setPower(power);
+                lift1.setPower(power);
+                lift2.setPower(power);
+                break;
+        }
+
+        // correction and timeout
+        double timeout;
+        int correction = targetPosition / 8;
+        if (targetPosition > 5000) {
+            timeout = targetPosition * (2/1000) + 2.5;
+        } else {
+            timeout = targetPosition * (2/1000) + 1.5;
+        }
+        int correctionTimeout = correction * (2/1000) + 1;
+
+        runtime.reset();
+        rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (lift2.isBusy() && lift1.isBusy() && (runtime.seconds() < timeout) && rearRight.isBusy() && rearLeft.isBusy() && frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive) {
+        }
+
+        rearLeft.setPower(0);
+        rearRight.setPower(0);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        telemetry.addLine("End macanumMovement");
+        telemetry.update();
+    }
+    public static void macanumAdjust(DcMotor front, DcMotor rear,
+                                     StrafeDirection strafeDirection,
+                                     int inches, double power, boolean opModeIsActive,
+                                     Telemetry telemetry) {
+
+        ElapsedTime runtime = new ElapsedTime();
+        telemetry.addLine("Begin macanumMovement");
+        telemetry.update();
+        front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        int targetPosition = AutonomousCommon.convertInchesToPosition(inches,strafeDirection==StrafeDirection.Left||strafeDirection==StrafeDirection.Right);
+        switch (strafeDirection) {
+
+            case Forward:
+                telemetry.addLine("moving forward");
+                telemetry.update();
+                rear.setTargetPosition(targetPosition);
+                front.setTargetPosition(targetPosition);
+                rear.setPower(power);
+                front.setPower(power);
+
+                break;
+            case Backward:
+                telemetry.addLine("moving backward");
+                telemetry.update();
+                rear.setTargetPosition(-targetPosition);
+                front.setTargetPosition(-targetPosition);
+                rear.setPower(power);
+                front.setPower(power);
+                break;
+        }
+
+        // correction and timeout
+        double timeout;
+        int correction = targetPosition / 8;
+        if (targetPosition > 5000) {
+            timeout = targetPosition * (2/1000) + 2.5;
+        } else {
+            timeout = targetPosition * (2/1000) + 1.5;
+        }
+        int correctionTimeout = correction * (2/1000) + 1;
+
+        runtime.reset();
+        front.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while ((runtime.seconds() < timeout) && front.isBusy() && rear.isBusy() && opModeIsActive) {
+        }
+
+
+        front.setPower(0);
+        rear.setPower(0);
+
         telemetry.addLine("End macanumMovement");
         telemetry.update();
     }
@@ -391,11 +510,43 @@ public class AutonomousCommon {
         Red
     }
     public static class VUPosition {
-        public double x;
-        public double z;
-        public double y;
+        private double x;
+        private double z;
+        private double y;
+        private double offset;
         public VUPositionDirection direction;
 
+        public int getX() {
+            return Math.abs((int)x)-9;
+        }
+
+        public void setX(double x) {
+            this.x = x;
+        }
+
+        public int getZ() {
+            return Math.abs((int)z);
+        }
+
+        public void setZ(double z) {
+            this.z = z;
+        }
+
+        public int getY() {
+            return Math.abs((int)y)-2;
+        }
+
+        public void setY(double y) {
+            this.y = y;
+        }
+
+        public int getOffset() {
+            return Math.abs((int)offset);
+        }
+
+        public void setOffset(double offset) {
+            this.offset = offset;
+        }
     }
     public enum VUPositionDirection {
         Left, Center, Right

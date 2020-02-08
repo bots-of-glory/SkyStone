@@ -12,8 +12,6 @@ import static org.firstinspires.ftc.teamcode.AutonomousCommon.RotateDegree;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.StrafeDirection;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPosition;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.VUPositionDirection;
-import static org.firstinspires.ftc.teamcode.AutonomousCommon.convertInchesToPosition;
-import static org.firstinspires.ftc.teamcode.AutonomousCommon.macanumMovement;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.macanumMovementTimeBased;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.macanumRotate;
 import static org.firstinspires.ftc.teamcode.AutonomousCommon.servoMovement;
@@ -213,7 +211,7 @@ public class SkystoneBaseTimeBased extends LinearOpMode {
 
         if (playSide ==PlayfieldSide.Red) {
             //TODO: replace with this with move foraward since we should already be center
-            int moveTo=Math.abs((int)position.x) -11;
+            int moveTo=Math.abs((int) position.getX()) -11;
            //telemetry.addLine(moveTo+"");
             //telemetry.update();
             //sleep(5000);

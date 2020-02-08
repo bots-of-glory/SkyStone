@@ -9,20 +9,18 @@ import org.firstinspires.ftc.teamcode.AutonomousCommon.PlayfieldSide;
 @Autonomous (name="LoadingZoneRed", group="Competition Autonomous")
 public class LoadingZoneRed extends SkystoneVisionBase {
     private ElapsedTime runtime = new ElapsedTime();
-
     @Override
     public void runOpMode() throws InterruptedException {
         playSide = PlayfieldSide.Red;
         AutonomousCommon.VUPosition position;
-
         initMotors();
         waitForStart();
         moveToScanPosition();
         position = locateSkystone();
-        moveToLegosFromScanPosition();
+        moveToLegosFromScanPosition(position);
         grabLego();
-       // moveToBuildingZoneTimeBased();
-       // dropLego();
-
+        moveToBuildingZone(position);
+        dropLego();
+        parkUnderSkybridge();
     }
 }
